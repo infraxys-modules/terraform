@@ -156,7 +156,7 @@
       "menuPath": ""
     },
     {
-      "menuLabel": "Get output",
+      "menuCaption": "Get output",
       "filename": "get_output.sh",
       "directory": "",
       "runsIndependent": false,
@@ -180,7 +180,7 @@
       "menuPath": ""
     },
     {
-      "menuLabel": "shared.sh",
+      "menuCaption": "shared.sh",
       "filename": "shared.sh",
       "directory": "",
       "runsIndependent": false,
@@ -204,7 +204,7 @@
       "menuPath": ""
     },
     {
-      "menuLabel": "Terraform apply",
+      "menuCaption": "Terraform apply",
       "filename": "terraform_apply.sh",
       "directory": "",
       "runsIndependent": false,
@@ -228,7 +228,7 @@
       "menuPath": ""
     },
     {
-      "menuLabel": "Terraform destroy",
+      "menuCaption": "Terraform destroy",
       "filename": "terraform_destroy.sh",
       "directory": "",
       "runsIndependent": false,
@@ -252,7 +252,7 @@
       "menuPath": "Destroy"
     },
     {
-      "menuLabel": "Terraform plan",
+      "menuCaption": "Terraform plan",
       "filename": "terraform_plan.sh",
       "directory": "",
       "runsIndependent": false,
@@ -277,7 +277,7 @@
       "menuPath": ""
     },
     {
-      "menuLabel": "Terraform plan destroy",
+      "menuCaption": "Terraform plan destroy",
       "filename": "terraform_plan_destroy.sh",
       "directory": "",
       "runsIndependent": false,
@@ -301,7 +301,7 @@
       "menuPath": "Destroy"
     },
     {
-      "menuLabel": "vpc_remote_state.tf",
+      "menuCaption": "vpc_remote_state.tf",
       "filename": "vpc_remote_state.tf",
       "directory": "",
       "runsIndependent": false,
