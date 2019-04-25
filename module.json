@@ -1,5 +1,4 @@
 {
-  "module_url": "git@github.com:infraxys-modules/terraform.git",
   "dependencies": [
   ]
 }

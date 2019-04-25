@@ -1,5 +1,8 @@
 function terraform_init() {
-    check_required_variables terraform_version;
+    if [ -z "$terraform_version" ]; then
+        log_info "Terraform version not specified. Using version 0.11.11";
+        local terraform_version="0.11.11";
+    fi;
     export TERRAFORM="/usr/local/bin/terraform-$terraform_version";
     if [ ! -f "$TERRAFORM" ]; then
         log_info "Terraform version $terraform_version not available in this provisioning server Docker image. Installing it now.";
@@ -41,12 +44,20 @@ function terraform_apply() {
     fi;
     terraform_init;
     $TERRAFORM apply -no-color -auto-approve;
-    terraform_get_output --do_init="false";
+    if [ "$?" != "0" ]; then
+        log_error "Terraform failed. Aborting.";
+        exit 1;
+    fi;
+    terraform_get_output --do_init "false";
 }
 
 function terraform_destroy() {
     terraform_init;
     $TERRAFORM destroy -force -no-color;
+    if [ "$?" != "0" ]; then
+        log_error "Terraform failed. Aborting.";
+        exit 1;
+    fi;
     terraform_get_output --do_init="false";
 }
 

@@ -1,0 +1,1 @@
+<INCLUDE terraform_setup.sh>
