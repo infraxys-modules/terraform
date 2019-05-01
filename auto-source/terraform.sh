@@ -1,4 +1,10 @@
 function terraform_init() {
+    echo "GIT_SSH_COMMAND: $GIT_SSH_COMMAND"
+    echo "GIT_SSH_COMMAND: $GIT_SSH_COMMAND"
+    echo "GIT_SSH_COMMAND: $GIT_SSH_COMMAND"
+    echo "GIT_SSH_COMMAND: $GIT_SSH_COMMAND"
+    export GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no";
+    echo "GIT_SSH_COMMAND: $GIT_SSH_COMMAND"
     if [ -z "$terraform_version" ]; then
         log_info "Terraform version not specified. Using version 0.11.11";
         local terraform_version="0.11.11";
