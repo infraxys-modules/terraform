@@ -13,8 +13,6 @@ function terraform_init() {
         rm -f terraform.zip
         cd -;
     fi;
-    pwd
-    touch a
     $TERRAFORM init -no-color;
 }
 
