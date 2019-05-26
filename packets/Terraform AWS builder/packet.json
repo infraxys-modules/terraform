@@ -116,8 +116,8 @@
       "menuPath": ""
     },
     {
-      "filename": "init_instance.sh",
-      "menuCaption": "init_instance.sh",
+      "filename": "after_modules_enabled.sh",
+      "menuCaption": "after_modules_enabled.sh",
       "directory": "",
       "runsIndependent": false,
       "runsParallel": false,
