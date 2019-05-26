@@ -10,6 +10,26 @@
   "infoHtml": "",
   "attributes": [
     {
+      "name": "aws_region",
+      "caption": "Region",
+      "type": "java.lang.String",
+      "formColumn": 1,
+      "formOrder": 1400,
+      "visibility": "ALWAYS VISIBLE",
+      "writability": "ALWAYS",
+      "required": true,
+      "isPartOfKey": false,
+      "listOfValues": "$instance.parent.getAttribute(\"aws_region\")\u003dInherit from parent,us-east-1,eu-west-1",
+      "newItemsAllowed": true,
+      "parseWithVelocity": true,
+      "cloneAttribute": true,
+      "autoExport": true,
+      "inputPrompt": "",
+      "tooltip": "",
+      "scope": "Instance",
+      "defaultValue": "$instance.parent.getAttribute(\"aws_region\")"
+    },
+    {
       "name": "extra_terraform",
       "caption": "Extra Terraform",
       "type": "byte[]",
