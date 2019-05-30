@@ -43,6 +43,7 @@ function terraform_apply() {
         fi;
     fi;
     terraform_init;
+    log_info "Executing $TERRAFORM apply";
     $TERRAFORM apply -no-color -auto-approve;
     if [ "$?" != "0" ]; then
         log_error "Terraform failed. Aborting.";
