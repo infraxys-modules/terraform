@@ -112,8 +112,8 @@
   ],
   "files": [
     {
-      "filename": "aws_builder.tf",
-      "menuCaption": "aws_builder.tf",
+      "filename": "after_modules_enabled.sh",
+      "menuCaption": "after_modules_enabled.sh",
       "directory": "",
       "runsIndependent": false,
       "runsParallel": false,
@@ -136,8 +136,8 @@
       "menuPath": ""
     },
     {
-      "filename": "after_modules_enabled.sh",
-      "menuCaption": "after_modules_enabled.sh",
+      "filename": "aws_builder.tf",
+      "menuCaption": "aws_builder.tf",
       "directory": "",
       "runsIndependent": false,
       "runsParallel": false,
