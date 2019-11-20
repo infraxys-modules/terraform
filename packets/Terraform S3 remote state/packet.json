@@ -50,6 +50,26 @@
       "defaultValue": "0"
     },
     {
+      "name": "profile",
+      "caption": "Profile",
+      "type": "java.lang.String",
+      "formColumn": 2,
+      "formOrder": 2100,
+      "visibility": "ALWAYS VISIBLE",
+      "writability": "ALWAYS",
+      "required": false,
+      "isPartOfKey": false,
+      "listOfValues": "",
+      "newItemsAllowed": false,
+      "parseWithVelocity": false,
+      "cloneAttribute": true,
+      "autoExport": true,
+      "inputPrompt": "",
+      "tooltip": "\u003cp\u003eSpecify a profile name if other credentials then those from the AWS core variables should be used.\u003c/p\u003e\n\u003cp\u003eAWS credentials- and config-files are generated before scripts run. A file for both is created with by concatenating all Variables of types AWS-CREDENTIALS and AWS-CONFIG respectively.\u003c/p\u003e",
+      "scope": "Instance",
+      "defaultValue": ""
+    },
+    {
       "name": "s3_bucket",
       "caption": "Bucket",
       "type": "java.lang.String",

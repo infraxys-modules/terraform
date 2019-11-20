@@ -1,0 +1,35 @@
+{
+  "version": "1.0",
+  "label": "Terraform config",
+  "type": "",
+  "autoExpand": false,
+  "skipEveryInstanceFiles": false,
+  "limitToAllowedChildren": false,
+  "autoGenerate": false,
+  "key": "INFRAXYS-TERRAFORM-CONFIG",
+  "infoHtml": "",
+  "attributes": [
+    {
+      "name": "default_terraform_version",
+      "caption": "Terraform version",
+      "type": "java.lang.String",
+      "formColumn": 1,
+      "formOrder": 1100,
+      "visibility": "ALWAYS VISIBLE",
+      "writability": "ALWAYS",
+      "required": false,
+      "isPartOfKey": false,
+      "listOfValues": "0.11.10,0.11.11,0.12.10",
+      "newItemsAllowed": true,
+      "parseWithVelocity": false,
+      "cloneAttribute": true,
+      "autoExport": true,
+      "inputPrompt": "",
+      "tooltip": "\u003cp\u003eSpecify a Terraform version that should be used by default.\u003cbr/\u003e\nOther instances can then use this value on the current container through \u003ccode\u003e$container.getAttribute(\"default_terraform_version\")\u003c/code\u003e.\u003c/p\u003e",
+      "scope": "Instance",
+      "defaultValue": "0.12.10"
+    }
+  ],
+  "files": [],
+  "allowedChildren": []
+}
