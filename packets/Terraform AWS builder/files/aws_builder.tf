@@ -1,6 +1,6 @@
 
 provider "aws" {
-  region = "$instance.getAttribute("aws_region")"
+  region = "$instance.parent.getAttribute("aws_region")"
 version = "~> 2.6.0"
 }
 
