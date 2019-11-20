@@ -1,16 +1,19 @@
+DEFAULT_TERRAFORM_VERSION="0.12.10";
+
 function terraform_init() {
     if [ -z "$terraform_version" ]; then
-        log_info "Terraform version not specified. Using version 0.11.11";
-        local terraform_version="0.11.11";
+        log_info "Terraform version not specified. Using version $DEFAULT_TERRAFORM_VERSION";
+        local terraform_version="$DEFAULT_TERRAFORM_VERSION";
     fi;
     export TERRAFORM="/usr/local/bin/terraform-$terraform_version";
     if [ ! -f "$TERRAFORM" ]; then
         log_info "Terraform version $terraform_version not available in this provisioning server Docker image. Installing it now.";
-        curl -L -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${terraform_version}/terraform_${terraform_version}_linux_amd64.zip;
-        cd /tmp;
+        mkdir /tmp/install_terraform
+        curl -sL -o /tmp/install_terraform/terraform.zip https://releases.hashicorp.com/terraform/${terraform_version}/terraform_${terraform_version}_linux_amd64.zip;
+        cd /tmp/install_terraform;
         unzip terraform.zip;
-        mv terraform /usr/local/bin/terraform-${terraform_version};
-        rm -f terraform.zip
+        mv terraform $TERRAFORM;
+        rm -Rf /tmp/install_terraform
         cd -;
     fi;
     $TERRAFORM init -no-color;
