@@ -1,4 +1,4 @@
-DEFAULT_TERRAFORM_VERSION="0.12.10";
+DEFAULT_TERRAFORM_VERSION="0.12.12";
 
 function terraform_init() {
     if [ -z "$terraform_version" ]; then
