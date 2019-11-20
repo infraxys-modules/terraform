@@ -107,7 +107,7 @@
       "inputPrompt": "",
       "tooltip": "\u003cp\u003eSpecify the path under which state files should be stored.\u003c/p\u003e",
       "scope": "Instance",
-      "defaultValue": "folderx/statey.tfstate"
+      "defaultValue": "dev-environments/env1"
     },
     {
       "name": "state_name",
