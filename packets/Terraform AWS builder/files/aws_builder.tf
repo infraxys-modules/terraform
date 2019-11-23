@@ -12,7 +12,7 @@ $extra_terraform
 #if ($stateInstance.packetKey == "TERRAFORM-S3-STATE")
 data "terraform_remote_state" "$stateInstance.getAttribute("state_name")" {
 backend = "s3"
-config = {
+config {
 bucket = "$stateInstance.getAttribute("s3_bucket")"
 key = "$stateInstance.getAttribute("state_key")"
 region = "$stateInstance.getAttribute("aws_region")"

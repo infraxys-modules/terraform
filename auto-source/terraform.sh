@@ -30,7 +30,7 @@ function terraform_plan_destroy() {
 }
 
 function terraform_apply() {
-    local grant;
+    local grant output_attribute_name="";
     #import_args "$@";
     #local grant="Apply VPC plan in PROD";
     if [ -n "$grant" ]; then
@@ -53,33 +53,39 @@ function terraform_apply() {
         log_error "Terraform failed. Aborting.";
         exit 1;
     fi;
-    terraform_get_output --do_init "false";
+    if [ -n "$output_attribute_name" ]; then
+      terraform_get_output --do_init "false" --output_attribute_name "$output_attribute_name";
+    fi;
 }
 
 function terraform_destroy() {
+    local output_attribute_name="";
     terraform_init;
     $TERRAFORM destroy -force -no-color;
     if [ "$?" != "0" ]; then
         log_error "Terraform failed. Aborting.";
         exit 1;
     fi;
-    terraform_get_output --do_init="false";
+    if [ -n "$output_attribute_name" ]; then
+      terraform_get_output --do_init="false" --output_attribute_name "$output_attribute_name";
+    fi;
 }
 
 function terraform_get_output() {
-    local function_name="terraform_get_output" do_init="true";
+    local function_name="terraform_get_output" do_init="true" output_attribute_name;
     import_args "$@";
+    check_required_arguments $function_name output_attribute_name
     [[ "$do_init" == "true" ]] && terraform_init;
     output="$($TERRAFORM output -json -no-color)";
-    save_last_output --output_json "$output";
+    save_last_output --output_json "$output" --output_attribute_name "$output_attribute_name";
 }
 
 function save_last_output() {
-    local function_name="save_last_output" output_json;
+    local function_name="save_last_output" output_json output_attribute_name;
     import_args "$@";
-    check_required_arguments $function_name output_json;
+    check_required_arguments $function_name output_json output_attribute_name;
     #output_json="$(echo "$output_json" | jq -c '.')";
-    update_instance_attribute --instance_id "$instance_db_id" --attribute_name "last_terraform_output" --attribute_value "$output_json" --compile_instance="true";
+    update_instance_attribute --instance_id "$instance_db_id" --attribute_name "$output_attribute_name" --attribute_value "$output_json" --compile_instance="true";
 }
 
 
