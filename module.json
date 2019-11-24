@@ -2,7 +2,7 @@
   "dependencies": [
     {
     "git_url": "git@github.com:infraxys-modules/aws-core.git",
-    "branch": "dev"
+    "branch": "master"
     }
   ]
 }

@@ -6,7 +6,9 @@ function terraform_init() {
         local terraform_version="$DEFAULT_TERRAFORM_VERSION";
     fi;
     export TERRAFORM="/usr/local/bin/terraform-$terraform_version";
-    if [ ! -f "$TERRAFORM" ]; then
+    if [ -f "$TERRAFORM" ]; then
+        log_info "Using Terraform version $terraform_version"
+    else
         log_info "Terraform version $terraform_version not available in this provisioning server Docker image. Installing it now.";
         mkdir /tmp/install_terraform
         curl -sL -o /tmp/install_terraform/terraform.zip https://releases.hashicorp.com/terraform/${terraform_version}/terraform_${terraform_version}_linux_amd64.zip;
