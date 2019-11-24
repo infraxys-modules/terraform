@@ -1,11 +1,8 @@
 terraform {
   backend "s3" {
-    bucket = "$s3_bucket"
-    key = "$state_key"
+    bucket = "$instance.getAttribute("s3_bucket")"
+    key = "$instance.getAttribute("state_key")"
     encrypt = "$instance.getAttributeAsBoolean("encrypt_state_file")"
-region = "$aws_region"
-#if ($instance.getAttribute("profile") != "")
-profile = "$instance.getAttribute("profile")"
-#end
+region = "$instance.getAttribute("aws_region")"
 }
 }
