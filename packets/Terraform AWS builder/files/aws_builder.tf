@@ -1,6 +1,6 @@
 
 provider "aws" {
-  region = "$instance.parent.getAttribute("aws_region")"
+  region = "$instance.getAttribute("aws_region")"
 version = "~> 2.6.0"
 }
 
@@ -12,7 +12,7 @@ $extra_terraform
 #if ($stateInstance.packetKey == "TERRAFORM-S3-STATE")
 data "terraform_remote_state" "$stateInstance.getAttribute("state_name")" {
 backend = "s3"
-config {
+config = {
 bucket = "$stateInstance.getAttribute("s3_bucket")"
 key = "$stateInstance.getAttribute("state_key")"
 region = "$stateInstance.getAttribute("aws_region")"
