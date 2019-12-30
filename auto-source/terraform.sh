@@ -21,6 +21,20 @@ function terraform_init() {
     $TERRAFORM init -no-color;
 }
 
+function terraform_plan_confirm_apply() {
+  local plan_file="/tmp/plan.out";
+  terraform_init;
+  set +e; # exit code 2 indicates changes should be applied
+  $TERRAFORM plan -no-color -detailed-exitcode -out="$plan_file";
+  local plan_result="$?"
+  [[ "$plan_result" == "0" ]] && log_info "No changes to apply" && return;
+  [[ "$plan_result" == "1" ]] && log_error "Errors detected during Terraform plan." && return;
+  set -e;
+  log_info "Please confirm";
+  read -p "===== Press enter to apply this plan";
+  terraform_apply --plan_file "$plan_file";
+}
+
 function terraform_plan() {
     terraform_init;
     $TERRAFORM plan -no-color;
@@ -32,8 +46,8 @@ function terraform_plan_destroy() {
 }
 
 function terraform_apply() {
-    local grant output_attribute_name="";
-    #import_args "$@";
+    local grant output_attribute_name="" plan_file="";
+    import_args "$@";
     #local grant="Apply VPC plan in PROD";
     if [ -n "$grant" ]; then
         log_debug "Checking if the current user has the necessary permissions to perform this action.";
@@ -47,9 +61,14 @@ function terraform_apply() {
             exit 1;
         fi;
     fi;
-    terraform_init;
-    log_info "Executing $TERRAFORM apply";
-    $TERRAFORM apply -no-color -auto-approve;
+    if [ -z "$plan_file" ]; then
+      terraform_init;
+      log_info "Executing $TERRAFORM apply";
+      $TERRAFORM apply -no-color -auto-approve;
+    else
+      log_info "Applying the plan";
+      $TERRAFORM apply -no-color "$plan_file";
+    fi;
     log_info "Apply done";
     if [ "$?" != "0" ]; then
         log_error "Terraform failed. Aborting.";
@@ -62,6 +81,7 @@ function terraform_apply() {
 
 function terraform_destroy() {
     local output_attribute_name="";
+    import_args "$@";
     terraform_init;
     $TERRAFORM destroy -force -no-color;
     if [ "$?" != "0" ]; then
@@ -89,5 +109,3 @@ function save_last_output() {
     #output_json="$(echo "$output_json" | jq -c '.')";
     update_instance_attribute --instance_id "$instance_db_id" --attribute_name "$output_attribute_name" --attribute_value "$output_json" --compile_instance="true";
 }
-
-
