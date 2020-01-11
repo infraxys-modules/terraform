@@ -28,10 +28,12 @@ function terraform_plan_confirm_apply() {
   $TERRAFORM plan -no-color -detailed-exitcode -out="$plan_file";
   local plan_result="$?"
   [[ "$plan_result" == "0" ]] && log_info "No changes to apply" && return;
-  [[ "$plan_result" == "1" ]] && log_error "Errors detected during Terraform plan." && return;
+  [[ "$plan_result" == "1" ]] && log_error "Errors detected during Terraform plan." && exit 1 && return;
   set -e;
-  log_info "Please confirm";
-  read -p "===== Press enter to apply this plan";
+  echo
+  echo ===============
+  read -p "Press enter to apply this plan
+===============";
   terraform_apply --plan_file "$plan_file";
 }
 

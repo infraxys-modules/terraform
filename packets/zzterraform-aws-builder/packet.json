@@ -81,7 +81,7 @@
       "visibility": "ALWAYS VISIBLE",
       "writability": "ALWAYS",
       "required": true,
-      "isPartOfKey": false,
+      "isPartOfKey": true,
       "listOfValues": "",
       "cacheMinutes": 0,
       "newItemsAllowed": false,
