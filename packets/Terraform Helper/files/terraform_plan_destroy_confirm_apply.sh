@@ -5,5 +5,5 @@
 #[[
 cd "$TERRAFORM_TEMP_DIR";
 
-terraform_plan_confirm_apply;
+terraform_plan_destroy_confirm_apply;
 ]]#

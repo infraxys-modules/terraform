@@ -42,6 +42,24 @@ function terraform_plan() {
     $TERRAFORM plan -no-color;
 }
 
+function terraform_plan_destroy_confirm_apply() {
+  local plan_file="/tmp/plan.out";
+  terraform_init;
+  set +e; # exit code 2 indicates changes should be applied
+  $TERRAFORM plan -destroy -no-color -detailed-exitcode -out="$plan_file";
+  local plan_result="$?"
+  [[ "$plan_result" == "0" ]] && log_info "No changes to apply" && return;
+  [[ "$plan_result" == "1" ]] && log_error "Errors detected during Terraform plan." && exit 1 && return;
+  set -e;
+  echo
+  echo ===============
+  read -p "Enter the word 'DESTROY' to apply this DESTROY plan
+===============" answer;
+  [[ "$answer" != "DESTROY" ]] && log_info "Answer was not 'DESTROY', aborting." && exit 1;
+  terraform_apply --plan_file "$plan_file";
+}
+
+
 function terraform_plan_destroy() {
     terraform_init;
     $TERRAFORM plan -destroy -no-color;

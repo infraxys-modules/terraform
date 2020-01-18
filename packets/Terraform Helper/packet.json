@@ -94,7 +94,7 @@
       "menuOrder": 400,
       "menuSeparatorBefore": true,
       "hideFromInstanceActionsMenu": false,
-      "hideFromBottomMenu": false,
+      "hideFromBottomMenu": true,
       "menuPath": "Destroy"
     },
     {
@@ -160,6 +160,26 @@
       "menuSeparatorBefore": false,
       "hideFromInstanceActionsMenu": false,
       "hideFromBottomMenu": false,
+      "menuPath": "Destroy"
+    },
+    {
+      "filename": "terraform_plan_destroy_confirm_apply.sh",
+      "menuCaption": "Terraform plan DESTROY, confirm and apply",
+      "directory": "",
+      "runsIndependent": false,
+      "runsParallel": false,
+      "runBeforeIndependentActions": false,
+      "parseWithVelocity": true,
+      "executable": true,
+      "saveWith": "CURRENT INSTANCE",
+      "isInteractive": false,
+      "hideRunnerWindow": false,
+      "timeoutSeconds": 3600,
+      "key": "",
+      "menuOrder": 100,
+      "menuSeparatorBefore": false,
+      "hideFromInstanceActionsMenu": false,
+      "hideFromBottomMenu": true,
       "menuPath": "Destroy"
     }
   ],

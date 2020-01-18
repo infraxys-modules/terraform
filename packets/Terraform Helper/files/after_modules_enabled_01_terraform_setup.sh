@@ -1,16 +1,13 @@
 TERRAFORM_TEMP_DIR="/tmp/terraform";
 mkdir -p "${D}TERRAFORM_TEMP_DIR";
 cp -R . "${D}TERRAFORM_TEMP_DIR";
-
 #foreach ($terraformInstance in $instance.getInstancesByFileExtension(".tf"))
 dir="$terraformInstance.getRelativePath()";
-
 cd ../../../${D}dir;
 if [ -f "init.sh" ]; then
     log_info "Sourcing init.sh in ${D}dir";
     . ./init.sh;
 fi;
-
 log_info 'Copying .tf and .tpl files from "$terraformInstance.toString()"';
 tmp_instance_id="$terraformInstance.getId()";
 #[[
