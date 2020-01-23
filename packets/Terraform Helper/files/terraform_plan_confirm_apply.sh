@@ -2,8 +2,6 @@
 	#set ($skip_action_creation = true)
 #end
 
-echo "test"
-
 #[[
 cd "$TERRAFORM_TEMP_DIR";
 
