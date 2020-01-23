@@ -11,6 +11,7 @@ function ensure_opa() {
     chmod u+x "$OPA";
   fi;
 }
+readonly -f ensure_opa;
 
 function terraform_init() {
     if [ -z "$terraform_version" ]; then
@@ -33,6 +34,7 @@ function terraform_init() {
     fi;
     $TERRAFORM init -no-color;
 }
+readonly -f terraform_init;
 
 function execute_rego_validators() {
   local function_name="execute_rego_validators" plan_file fails="false" terraform_plan_json_file="/tmp/plan.json" \
@@ -66,6 +68,7 @@ function execute_rego_validators() {
   fi;
 
 }
+readonly -f execute_rego_validators;
 
 function terraform_plan_confirm_apply() {
   local plan_file="/tmp/plan.out";
@@ -88,11 +91,13 @@ function terraform_plan_confirm_apply() {
 
   terraform_apply --plan_file "$plan_file";
 }
+readonly -f terraform_plan_confirm_apply;
 
 function terraform_plan() {
     terraform_init;
     $TERRAFORM plan -no-color;
 }
+readonly -f terraform_plan;
 
 function terraform_plan_destroy_confirm_apply() {
   local plan_file="/tmp/plan.out";
@@ -110,11 +115,13 @@ function terraform_plan_destroy_confirm_apply() {
   [[ "$answer" != "DESTROY" ]] && log_info "Answer was not 'DESTROY', aborting." && exit 1;
   terraform_apply --plan_file "$plan_file";
 }
+readonly -f terraform_plan_destroy_confirm_apply;
 
 function terraform_plan_destroy() {
     terraform_init;
     $TERRAFORM plan -destroy -no-color;
 }
+readonly -f terraform_plan_destroy;
 
 function terraform_apply() {
     local grant output_attribute_name="" plan_file="";
@@ -149,6 +156,7 @@ function terraform_apply() {
       terraform_get_output --do_init "false" --output_attribute_name "$output_attribute_name";
     fi;
 }
+readonly -f terraform_apply;
 
 function terraform_destroy() {
     local output_attribute_name="";
@@ -163,6 +171,7 @@ function terraform_destroy() {
       terraform_get_output --do_init="false" --output_attribute_name "$output_attribute_name";
     fi;
 }
+readonly -f terraform_destroy;
 
 function terraform_get_output() {
     local function_name="terraform_get_output" do_init="true" output_attribute_name;
