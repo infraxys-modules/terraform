@@ -20,6 +20,7 @@
       "required": true,
       "isPartOfKey": true,
       "listOfValues": "",
+      "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
       "referenceChildGuidFilter": "",
