@@ -1,10 +1,23 @@
 DEFAULT_TERRAFORM_VERSION="0.12.12";
 
+function ensure_opa() {
+  local function_name="ensure_opa" opa_version="v0.16.1";
+  export OPA="/usr/local/bin/opa-$opa_version";
+  if [ -f "$filename" ]; then
+    log_info "Using OPA version $opa_version.";
+  else
+    log_info "Installing OPA version $opa_version";
+    curl -sSLo "$OPA" https://github.com/open-policy-agent/opa/releases/download/${opa_version}/opa_linux_amd64;
+    chmod u+x "$OPA";
+  fi;
+}
+
 function terraform_init() {
     if [ -z "$terraform_version" ]; then
         log_info "Terraform version not specified. Using version $DEFAULT_TERRAFORM_VERSION";
         local terraform_version="$DEFAULT_TERRAFORM_VERSION";
     fi;
+
     export TERRAFORM="/usr/local/bin/terraform-$terraform_version";
     if [ -f "$TERRAFORM" ]; then
         log_info "Using Terraform version $terraform_version"
@@ -21,8 +34,43 @@ function terraform_init() {
     $TERRAFORM init -no-color;
 }
 
+function execute_rego_validators() {
+  local function_name="execute_rego_validators" plan_file fails="false" terraform_plan_json_file="/tmp/plan.json" \
+        json_created="false" opa_tests_ok="true";
+  import_args "$@";
+  check_required_arguments $function_name plan_file;
+
+  log_info "Executing rego validators (files in the instance directory and at the environment-level with names starting with 'rego_validator'."
+
+  for validator in $(find "$INSTANCE_DIR/" "$INFRAXYS_ROOT/environments/$environment_directory/environment.auto/" -type f -name rego_validator\*); do
+
+    if [ "$json_created" == "false" ]; then
+      ensure_opa;
+      log_info "Converting the Terraform plan to JSON for OPA."
+      terraform show -json "$plan_file" > "$terraform_plan_json_file";
+      json_created="true";
+    fi;
+
+    log_info "Executing $validator";
+    set +e;
+
+    # run in a subshell and avoid that the shell can change our environment
+    (. $validator --terraform_plan_json_file "$terraform_plan_json_file");
+    local exit_code=$?
+    [[ "$exit_code" -ne 0 ]] && log_error "Test failed with exit code $exit_code" && opa_tests_ok="false";
+    set -e;
+  done;
+  if [ "$opa_tests_ok" != "true" ]; then
+    log_error "OPA tests violated, aborting!";
+    exit 1;
+  fi;
+
+}
+
 function terraform_plan_confirm_apply() {
   local plan_file="/tmp/plan.out";
+
+  local rego_file="$INSTANCE_DIR/terraform.rego";
   terraform_init;
   set +e; # exit code 2 indicates changes should be applied
   $TERRAFORM plan -no-color -detailed-exitcode -out="$plan_file";
@@ -30,10 +78,14 @@ function terraform_plan_confirm_apply() {
   [[ "$plan_result" == "0" ]] && log_info "No changes to apply" && return;
   [[ "$plan_result" == "1" ]] && log_error "Errors detected during Terraform plan." && exit 1 && return;
   set -e;
+  execute_rego_validators --plan_file "$plan_file"
+
   echo
   echo ===============
   read -p "Press enter to apply this plan
 ===============";
+
+
   terraform_apply --plan_file "$plan_file";
 }
 
@@ -58,7 +110,6 @@ function terraform_plan_destroy_confirm_apply() {
   [[ "$answer" != "DESTROY" ]] && log_info "Answer was not 'DESTROY', aborting." && exit 1;
   terraform_apply --plan_file "$plan_file";
 }
-
 
 function terraform_plan_destroy() {
     terraform_init;

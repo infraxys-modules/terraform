@@ -1,7 +1,7 @@
 TERRAFORM_TEMP_DIR="/tmp/terraform";
 mkdir -p "${D}TERRAFORM_TEMP_DIR";
 cp -R . "${D}TERRAFORM_TEMP_DIR";
-#foreach ($terraformInstance in $instance.getInstancesByFileExtension(".tf"))
+#foreach ($terraformInstance in $instance.getInstancesByFileExtensions(".tf", ".tpl"))
 dir="$terraformInstance.getRelativePath()";
 cd ../../../${D}dir;
 if [ -f "init.sh" ]; then
