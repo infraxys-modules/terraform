@@ -126,7 +126,6 @@ readonly -f terraform_plan_destroy;
 function terraform_apply() {
     local grant output_attribute_name="" plan_file="";
     import_args "$@";
-    #local grant="Apply VPC plan in PROD";
     if [ -n "$grant" ]; then
         log_debug "Checking if the current user has the necessary permissions to perform this action.";
         local has_rights="$(/tmp/infraxys/system/has_grant "$grant")";
