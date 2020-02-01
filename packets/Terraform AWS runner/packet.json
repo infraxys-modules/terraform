@@ -21,6 +21,7 @@
       "required": false,
       "isPartOfKey": false,
       "listOfValues": "~\u003e 2.32.0",
+      "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
       "referenceChildGuidFilter": "",
@@ -107,6 +108,7 @@
       "required": false,
       "isPartOfKey": false,
       "listOfValues": "",
+      "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
       "referenceChildGuidFilter": "",
@@ -143,6 +145,7 @@
   ],
   "files": [
     {
+      "guid": "73ee7dd7-7c4d-4bf5-b9c3-fa333cd14dbe",
       "filename": "aws_builder.tf",
       "menuCaption": "aws_builder.tf",
       "directory": "",

@@ -132,6 +132,7 @@
   ],
   "files": [
     {
+      "guid": "3ed52850-b0c0-4eb3-af91-b92357d393c2",
       "filename": "remote_state.tf",
       "includeName": "",
       "menuCaption": "remote_state.tf",

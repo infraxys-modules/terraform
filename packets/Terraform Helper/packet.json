@@ -36,6 +36,7 @@
   ],
   "files": [
     {
+      "guid": "d443a86f-8e37-41bb-8d84-abec0a2b61c6",
       "filename": "after_modules_enabled_01_terraform_setup.sh",
       "includeName": "terraform_setup.sh",
       "menuCaption": "after_modules_enabled_01_terraform_setup.sh",
@@ -57,6 +58,7 @@
       "menuPath": ""
     },
     {
+      "guid": "f5474149-0910-4824-bc72-400346e3b616",
       "filename": "terraform_apply.sh",
       "includeName": "terraform_apply.sh",
       "menuCaption": "Terraform apply",
@@ -78,6 +80,7 @@
       "menuPath": ""
     },
     {
+      "guid": "d4a2261e-fbc1-4eb7-97c7-9d84dc8639b3",
       "filename": "terraform_destroy.sh",
       "includeName": "terraform_destroy.sh",
       "menuCaption": "Terraform destroy",
@@ -99,6 +102,7 @@
       "menuPath": "Destroy"
     },
     {
+      "guid": "2ef8f0e3-b959-456a-b5aa-21e5946843ef",
       "filename": "terraform_plan.sh",
       "includeName": "terraform_plan.sh",
       "menuCaption": "Terraform plan",
@@ -121,6 +125,7 @@
       "menuPath": ""
     },
     {
+      "guid": "a9e6c6ce-3278-4714-83cb-674bb7f0fe49",
       "filename": "terraform_plan_confirm_apply.sh",
       "includeName": "terraform_plan_confirm_apply.sh",
       "menuCaption": "Terraform plan, confirm and apply",
@@ -142,6 +147,7 @@
       "menuPath": ""
     },
     {
+      "guid": "503791c8-d96c-4c26-a80e-82eddd275777",
       "filename": "terraform_plan_destroy.sh",
       "includeName": "terraform_plan_destroy.sh",
       "menuCaption": "Terraform plan destroy",
@@ -163,6 +169,7 @@
       "menuPath": "Destroy"
     },
     {
+      "guid": "ab1261a4-01d5-49a5-b0a4-7d22c5a4b276",
       "filename": "terraform_plan_destroy_confirm_apply.sh",
       "menuCaption": "Terraform plan DESTROY, confirm and apply",
       "directory": "",
