@@ -44,7 +44,7 @@
       "writability": "ALWAYS",
       "required": true,
       "isPartOfKey": false,
-      "listOfValues": "$instance.parent.getAttribute(\"aws_region\")\u003dInherit from parent,us-east-1,eu-west-1",
+      "listOfValues": "$instance.parent.getAttribute(\"aws_region\")\u003dInherit from parent,$instance.byVelocity(\"vpc\").getAttribute(\"aws_region\"),us-east-1,eu-west-1",
       "cacheMinutes": 0,
       "newItemsAllowed": true,
       "parseWithVelocity": true,
