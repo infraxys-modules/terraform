@@ -36,6 +36,20 @@ function terraform_init() {
 }
 readonly -f terraform_init;
 
+function dump_terraform_files() {
+  echo
+  for f in $(find . -maxdepth 1 -type f -name \*.tpl | sort); do
+  	echo "---- $f:";
+  	cat "$f";
+  done;
+  echo
+  echo
+  for f in $(find . -maxdepth 1 -type f -name \*.tf | sort); do
+  	echo "---- $f:";
+  	cat "$f";
+  done;
+}
+
 function execute_rego_validators() {
   local function_name="execute_rego_validators" plan_file fails="false" terraform_plan_json_file="/tmp/plan.json" \
         json_created="false" opa_tests_ok="true";
@@ -96,6 +110,12 @@ readonly -f terraform_plan_confirm_apply;
 function terraform_plan() {
     terraform_init;
     $TERRAFORM plan -no-color;
+}
+readonly -f terraform_plan;
+
+function terraform_refresh() {
+    terraform_init;
+    $TERRAFORM refresh -no-color;
 }
 readonly -f terraform_plan;
 

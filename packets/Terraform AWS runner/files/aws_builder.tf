@@ -8,7 +8,7 @@ provider "aws" {
 $extra_terraform
 #end
 
-#foreach ($stateInstance in $instance.getInstancesByAttributeVelocityNames("state_velocity_names", false, false))
+#foreach ($stateInstance in $instance.getInstancesByAttributeVelocityNames("state_velocity_names", false, true))
 #if ($stateInstance.packetKey == "TERRAFORM-S3-STATE")
 data "terraform_remote_state" "$stateInstance.getAttribute("state_name")" {
 backend = "s3"
