@@ -8,7 +8,7 @@ if [ -f "init.sh" ]; then
     log_info "Sourcing init.sh in ${D}dir";
     . ./init.sh;
 fi;
-log_info 'Copying .tf and .tpl files from "$terraformInstance.toString()"';
+log_info 'Copying .tf and .tpl files from instance "$terraformInstance.toString()"';
 tmp_instance_id="$terraformInstance.getId()";
 #[[
 for f in $(find . -maxdepth 1 -type f -name \*.tf); do

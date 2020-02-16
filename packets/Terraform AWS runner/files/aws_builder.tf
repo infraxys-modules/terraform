@@ -1,7 +1,11 @@
+terraform {
+  required_providers {
+    aws = "$instance.getAttribute("aws_provider_version")"
+  }
+}
 
 provider "aws" {
   region = "$instance.getAttribute("aws_region")"
-  version = "$instance.getAttribute("aws_provider_version")"
 }
 
 #if ($extra_terraform)
