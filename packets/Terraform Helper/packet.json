@@ -37,9 +37,9 @@
   "files": [
     {
       "guid": "d443a86f-8e37-41bb-8d84-abec0a2b61c6",
-      "filename": "after_modules_enabled_01_terraform_setup.sh",
+      "filename": "after_modules_enabled.01_terraform_setup.sh",
       "includeName": "terraform_setup.sh",
-      "menuCaption": "after_modules_enabled_01_terraform_setup.sh",
+      "menuCaption": "after_modules_enabled.01_terraform_setup.sh",
       "directory": "",
       "runsIndependent": false,
       "runsParallel": false,
@@ -59,9 +59,9 @@
     },
     {
       "guid": "bac233f2-f351-41e2-bb6d-49341e62f485",
-      "filename": "show_tf_and_tpl_content.sh",
+      "filename": "show_tf_tpl_tfvars_content.sh",
       "includeName": "",
-      "menuCaption": "Show .tf and .tpl content",
+      "menuCaption": "Show .tf, .tpl and .tfvars content",
       "directory": "",
       "runsIndependent": false,
       "runsParallel": false,

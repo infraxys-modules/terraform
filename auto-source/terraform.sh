@@ -35,6 +35,12 @@ function dump_terraform_files() {
   	echo "---- $f:";
   	cat "$f";
   done;
+  echo
+  echo
+  for f in $(find . -maxdepth 1 -type f -name \*.tfvars | sort); do
+  	echo "---- $f:";
+  	cat "$f";
+  done;
 }
 
 function terraform_plan_confirm_apply() {
@@ -82,10 +88,14 @@ function terraform_plan_destroy_confirm_apply() {
   [[ "$plan_result" == "1" ]] && log_error "Errors detected during Terraform plan." && exit 1 && return;
   set -e;
   echo
-  echo ===============
+  echo =============================================
   read -p "Enter the word 'DESTROY' to apply this DESTROY plan
-===============" answer;
-  [[ "$answer" != "DESTROY" ]] && log_info "Answer was not 'DESTROY', aborting." && exit 1;
+=============================================" answer;
+  if [ "$answer" != "DESTROY" ]; then
+    log_info "Answer was not 'DESTROY', try once more.";
+    read -p "Enter the word 'DESTROY' to apply this DESTROY plan " answer;
+    [[ "$answer" != "DESTROY" ]] && log_info "Answer was not 'DESTROY', aborting." && exit 1;
+  fi;
   terraform_apply --plan_file "$plan_file";
 }
 readonly -f terraform_plan_destroy_confirm_apply;
