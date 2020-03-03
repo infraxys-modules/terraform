@@ -1,4 +1,5 @@
 DEFAULT_TERRAFORM_VERSION="0.12.12";
+process_netrc_variables; # make sure https-modules that are in GitHub Enterprise and/or private can be downloaded
 
 function terraform_init() {
     if [ -z "$terraform_version" ]; then
