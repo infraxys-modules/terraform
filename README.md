@@ -39,7 +39,12 @@ Other instances will have the Terraform plan and apply actions outlined below.
 
 If you need to gather information just before executing Terraform, then create a file called "init.sh" to do so.
 
- 
+### Executing code after apply and destroy
+
+After Terraform apply has finished, all packet files with a name starting with "after_terraform_apply" are executed.
+
+For Terraform destroy file with a name starting with "after_terraform_destroy)" are executed.
+
 ## Inherited files:
 
 __after_modules_enabled_01_terraform_setup.sh__

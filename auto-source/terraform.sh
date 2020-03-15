@@ -64,6 +64,7 @@ function terraform_plan_confirm_apply() {
 
 
   terraform_apply --plan_file "$plan_file";
+
 }
 readonly -f terraform_plan_confirm_apply;
 
@@ -138,6 +139,7 @@ function terraform_apply() {
     if [ -n "$output_attribute_name" ]; then
       terraform_get_output --do_init "false" --output_attribute_name "$output_attribute_name";
     fi;
+    run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_apply*';
 }
 readonly -f terraform_apply;
 
@@ -153,6 +155,7 @@ function terraform_destroy() {
     if [ -n "$output_attribute_name" ]; then
       terraform_get_output --do_init="false" --output_attribute_name "$output_attribute_name";
     fi;
+    run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_destroy*';
 }
 readonly -f terraform_destroy;
 

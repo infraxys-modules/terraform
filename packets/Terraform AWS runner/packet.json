@@ -20,7 +20,7 @@
       "writability": "ALWAYS",
       "required": false,
       "isPartOfKey": false,
-      "listOfValues": "~\u003e 2.32.0",
+      "listOfValues": "2.53.0",
       "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
@@ -28,11 +28,10 @@
       "newItemsAllowed": true,
       "parseWithVelocity": false,
       "cloneAttribute": true,
-      "autoExport": true,
       "inputPrompt": "",
       "tooltip": "",
       "scope": "Instance",
-      "defaultValue": "~\u003e 2.32.0"
+      "defaultValue": "2.53.0"
     },
     {
       "name": "aws_region",
@@ -49,7 +48,6 @@
       "newItemsAllowed": true,
       "parseWithVelocity": true,
       "cloneAttribute": true,
-      "autoExport": true,
       "inputPrompt": "",
       "tooltip": "",
       "scope": "Instance",
@@ -70,7 +68,6 @@
       "newItemsAllowed": false,
       "parseWithVelocity": true,
       "cloneAttribute": true,
-      "autoExport": true,
       "inputPrompt": "",
       "tooltip": "\u003cp\u003eAdd extra Terraform code. Use this to import state from other Terraform configurations, for example\u003c/p\u003e\n\u003cpre\u003e\u003csource\u003e\ndata \"terraform_remote_state\" \"vpc\" {\n  backend \u003d \"s3\"\n  config {\n    bucket \u003d \"$vpc.getAttribute(\"s3_bucket\")\"\n    key \u003d \"$vpc.getAttribute(\"state_key\")\"\n    region \u003d \"$vpc.getAttribute(\"aws_region\")\"\n  }\n}\n\u003c/pre\u003e\u003c/source\u003e",
       "scope": "Instance",
@@ -91,7 +88,6 @@
       "newItemsAllowed": false,
       "parseWithVelocity": false,
       "cloneAttribute": true,
-      "autoExport": true,
       "inputPrompt": "",
       "tooltip": "\u003cp\u003eInstance label to show\u003c/p\u003e",
       "scope": "Instance",
@@ -115,7 +111,6 @@
       "newItemsAllowed": false,
       "parseWithVelocity": false,
       "cloneAttribute": true,
-      "autoExport": true,
       "inputPrompt": "",
       "tooltip": "",
       "scope": "Instance",
@@ -136,7 +131,6 @@
       "newItemsAllowed": false,
       "parseWithVelocity": false,
       "cloneAttribute": true,
-      "autoExport": true,
       "inputPrompt": "",
       "tooltip": "\u003cp\u003eSpecify a comma-separated list of Velocity names of instances that configure a state store for other Terraform runs.\u003c/p\u003e",
       "scope": "Instance",
@@ -163,7 +157,9 @@
       "menuSeparatorBefore": false,
       "hideFromInstanceActionsMenu": false,
       "hideFromBottomMenu": false,
-      "menuPath": ""
+      "menuPath": "",
+      "dockerImage": "",
+      "customCommand": ""
     },
     {
       "guid": "9f80bdfa-bf4b-47f9-9025-396fedead911",
