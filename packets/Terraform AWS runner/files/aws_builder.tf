@@ -1,3 +1,4 @@
+#if ($instance.getAttribute("aws_provider_version") != "")
 terraform {
   required_providers {
     aws = "$instance.getAttribute("aws_provider_version")"
@@ -7,6 +8,7 @@ terraform {
 provider "aws" {
   region = "$instance.getAttribute("aws_region")"
 }
+#end
 
 #if ($extra_terraform)
 $extra_terraform

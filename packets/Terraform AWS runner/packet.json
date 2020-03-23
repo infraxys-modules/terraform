@@ -29,7 +29,7 @@
       "parseWithVelocity": false,
       "cloneAttribute": true,
       "inputPrompt": "",
-      "tooltip": "",
+      "tooltip": "\u003cp\u003eLeave empty if an aws-provider is injected by a child instance. This is useful when using multiple AWS credentials in the same run.\u003c/p\u003e.",
       "scope": "Instance",
       "defaultValue": "2.53.0"
     },
