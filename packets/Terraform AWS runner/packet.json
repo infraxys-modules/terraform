@@ -135,6 +135,28 @@
       "tooltip": "\u003cp\u003eSpecify a comma-separated list of Velocity names of instances that configure a state store for other Terraform runs.\u003c/p\u003e",
       "scope": "Instance",
       "defaultValue": ""
+    },
+    {
+      "name": "terraform_version",
+      "caption": "Terraform version",
+      "type": "java.lang.String",
+      "formColumn": 1,
+      "formOrder": 1125,
+      "visibility": "ALWAYS VISIBLE",
+      "writability": "ALWAYS",
+      "required": true,
+      "isPartOfKey": false,
+      "listOfValues": "0.12.12,0.12.24",
+      "referenceFilter": "",
+      "referenceValueAttributeName": "",
+      "referenceChildGuidFilter": "",
+      "newItemsAllowed": true,
+      "parseWithVelocity": false,
+      "cloneAttribute": true,
+      "inputPrompt": "",
+      "tooltip": "",
+      "scope": "Instance",
+      "defaultValue": "0.12.12"
     }
   ],
   "files": [

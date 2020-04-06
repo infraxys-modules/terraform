@@ -92,7 +92,8 @@ function terraform_plan_destroy_confirm_apply() {
   echo
   echo =============================================
   read -p "Enter the word 'DESTROY' to apply this DESTROY plan
-=============================================" answer;
+=============================================
+" answer;
   if [ "$answer" != "DESTROY" ]; then
     log_info "Answer was not 'DESTROY', try once more.";
     read -p "Enter the word 'DESTROY' to apply this DESTROY plan " answer;
