@@ -10,12 +10,12 @@ if [ -f "init.sh" ]; then
     . ./init.sh;
 fi;
 log_info 'Copying .tf, .tpl and .tfvars files from instance "$terraformInstance.toString()"';
-tmp_instance_id="$terraformInstance.getId()";
+tmp_instance_guid="$terraformInstance.getGuid()";
 #[[
 for f in $(find . -maxdepth 1 -type f -name \*.tf); do
     f="$(basename "$f")" # remove ./
-    log_info "Copying $f as '$TERRAFORM_TEMP_DIR/${tmp_instance_id}_$f'.";
-    cp $f "$TERRAFORM_TEMP_DIR/${tmp_instance_id}_$f";
+    log_info "Copying $f as '$TERRAFORM_TEMP_DIR/${tmp_instance_guid}_$f'.";
+    cp $f "$TERRAFORM_TEMP_DIR/${tmp_instance_guid}_$f";
 done;
 
 for f in $(find . -maxdepth 1 -type f -name \*.tpl); do

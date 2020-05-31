@@ -1,16 +1,17 @@
 {
   "version": "1.0",
+  "id": "8d5f446b-2b03-4ca7-bff0-6f860994a72b",
   "label": "Terraform AWS provider %aws_profile%",
   "type": "",
   "autoExpand": false,
   "skipEveryInstanceFiles": false,
   "limitToAllowedChildren": false,
   "autoGenerate": false,
-  "inheritFilesFromPacketGuid": "",
   "key": "",
   "infoHtml": "",
   "attributes": [
     {
+      "id": "498eb5a2-0612-4955-9469-d5ee0584dd2f",
       "name": "aws_profile",
       "caption": "AWS profile",
       "type": "java.lang.String",
@@ -21,9 +22,10 @@
       "required": true,
       "isPartOfKey": false,
       "listOfValues": "",
+      "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
-      "referenceChildGuidFilter": "",
+      "referenceChildIdFilter": "",
       "newItemsAllowed": false,
       "parseWithVelocity": false,
       "cloneAttribute": true,
@@ -33,6 +35,7 @@
       "defaultValue": ""
     },
     {
+      "id": "0d14f3b6-fddc-4065-be50-3abd3d6c2094",
       "name": "provider_alias",
       "caption": "Provider alias",
       "type": "java.lang.String",
@@ -43,9 +46,10 @@
       "required": true,
       "isPartOfKey": false,
       "listOfValues": "",
+      "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
-      "referenceChildGuidFilter": "",
+      "referenceChildIdFilter": "",
       "newItemsAllowed": false,
       "parseWithVelocity": false,
       "cloneAttribute": true,
@@ -55,6 +59,7 @@
       "defaultValue": ""
     },
     {
+      "id": "52fa84e2-73d2-4d2f-a306-c8da2ba84318",
       "name": "provider_line",
       "caption": "Provider line",
       "type": "java.lang.String",
@@ -65,9 +70,10 @@
       "required": true,
       "isPartOfKey": false,
       "listOfValues": "",
+      "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
-      "referenceChildGuidFilter": "",
+      "referenceChildIdFilter": "",
       "newItemsAllowed": false,
       "parseWithVelocity": true,
       "cloneAttribute": true,
@@ -77,6 +83,7 @@
       "defaultValue": "provider \u003d aws.${instance.getAttribute(\"provider_alias\")}"
     },
     {
+      "id": "69a18f56-0e81-49d3-9026-4f22c1cb81c4",
       "name": "provider_region",
       "caption": "AWS region",
       "type": "java.lang.String",
@@ -87,9 +94,10 @@
       "required": true,
       "isPartOfKey": false,
       "listOfValues": "us-east-1,eu-central-1,eu-west-1",
+      "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
-      "referenceChildGuidFilter": "",
+      "referenceChildIdFilter": "",
       "newItemsAllowed": true,
       "parseWithVelocity": false,
       "cloneAttribute": true,
@@ -101,7 +109,7 @@
   ],
   "files": [
     {
-      "guid": "4de7aeaf-e870-4a73-8875-4db379d8f4bb",
+      "id": "4de7aeaf-e870-4a73-8875-4db379d8f4bb",
       "filename": "aws_provider.tf",
       "includeName": "",
       "menuCaption": "aws_provider.tf",
@@ -125,7 +133,7 @@
       "customCommand": ""
     },
     {
-      "guid": "d49b5e3e-c636-4bf3-bb87-7de023fcdfaa",
+      "id": "d49b5e3e-c636-4bf3-bb87-7de023fcdfaa",
       "filename": "init.sh",
       "includeName": "",
       "menuCaption": "init.sh",

@@ -1,5 +1,6 @@
 {
   "version": "1.0",
+  "id": "a3acdf4d-9d7c-4a0f-bbc8-8ea21f667e43",
   "label": "%instance_label%",
   "type": "",
   "autoExpand": false,
@@ -10,6 +11,7 @@
   "infoHtml": "\u003cp\u003eThis packet contains shared (Velocity) functions for terraform directory setup, ...\u003c/p\u003e",
   "attributes": [
     {
+      "id": "48dc1c32-c7f0-4d0b-a775-f3bc0002e362",
       "name": "instance_label",
       "caption": "Instance label",
       "type": "java.lang.String",
@@ -23,11 +25,10 @@
       "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
-      "referenceChildGuidFilter": "",
+      "referenceChildIdFilter": "",
       "newItemsAllowed": false,
       "parseWithVelocity": false,
       "cloneAttribute": true,
-      "autoExport": true,
       "inputPrompt": "",
       "tooltip": "",
       "scope": "Instance",
@@ -36,7 +37,7 @@
   ],
   "files": [
     {
-      "guid": "d443a86f-8e37-41bb-8d84-abec0a2b61c6",
+      "id": "d443a86f-8e37-41bb-8d84-abec0a2b61c6",
       "filename": "after_modules_enabled.01_terraform_setup.sh",
       "includeName": "terraform_setup.sh",
       "menuCaption": "after_modules_enabled.01_terraform_setup.sh",
@@ -55,10 +56,12 @@
       "menuSeparatorBefore": false,
       "hideFromInstanceActionsMenu": false,
       "hideFromBottomMenu": false,
-      "menuPath": ""
+      "menuPath": "",
+      "dockerImage": "",
+      "customCommand": ""
     },
     {
-      "guid": "bac233f2-f351-41e2-bb6d-49341e62f485",
+      "id": "bac233f2-f351-41e2-bb6d-49341e62f485",
       "filename": "show_tf_tpl_tfvars_content.sh",
       "includeName": "",
       "menuCaption": "Show .tf, .tpl and .tfvars content",
@@ -77,10 +80,12 @@
       "menuSeparatorBefore": false,
       "hideFromInstanceActionsMenu": false,
       "hideFromBottomMenu": false,
-      "menuPath": "Utils"
+      "menuPath": "Utils",
+      "dockerImage": "",
+      "customCommand": ""
     },
     {
-      "guid": "f5474149-0910-4824-bc72-400346e3b616",
+      "id": "f5474149-0910-4824-bc72-400346e3b616",
       "filename": "terraform_apply.sh",
       "includeName": "terraform_apply.sh",
       "menuCaption": "Terraform apply",
@@ -99,10 +104,12 @@
       "menuSeparatorBefore": true,
       "hideFromInstanceActionsMenu": false,
       "hideFromBottomMenu": false,
-      "menuPath": ""
+      "menuPath": "",
+      "dockerImage": "",
+      "customCommand": ""
     },
     {
-      "guid": "d4a2261e-fbc1-4eb7-97c7-9d84dc8639b3",
+      "id": "d4a2261e-fbc1-4eb7-97c7-9d84dc8639b3",
       "filename": "terraform_destroy.sh",
       "includeName": "terraform_destroy.sh",
       "menuCaption": "Terraform destroy",
@@ -121,10 +128,12 @@
       "menuSeparatorBefore": true,
       "hideFromInstanceActionsMenu": false,
       "hideFromBottomMenu": true,
-      "menuPath": "Destroy"
+      "menuPath": "Destroy",
+      "dockerImage": "",
+      "customCommand": ""
     },
     {
-      "guid": "2ef8f0e3-b959-456a-b5aa-21e5946843ef",
+      "id": "2ef8f0e3-b959-456a-b5aa-21e5946843ef",
       "filename": "terraform_plan.sh",
       "includeName": "terraform_plan.sh",
       "menuCaption": "Terraform plan",
@@ -144,10 +153,12 @@
       "addToContextMenu": "TEMPLATE IMAGE",
       "hideFromInstanceActionsMenu": false,
       "hideFromBottomMenu": false,
-      "menuPath": ""
+      "menuPath": "",
+      "dockerImage": "",
+      "customCommand": ""
     },
     {
-      "guid": "a9e6c6ce-3278-4714-83cb-674bb7f0fe49",
+      "id": "a9e6c6ce-3278-4714-83cb-674bb7f0fe49",
       "filename": "terraform_plan_confirm_apply.sh",
       "includeName": "terraform_plan_confirm_apply.sh",
       "menuCaption": "Terraform plan, confirm and apply",
@@ -166,10 +177,12 @@
       "menuSeparatorBefore": false,
       "hideFromInstanceActionsMenu": false,
       "hideFromBottomMenu": false,
-      "menuPath": ""
+      "menuPath": "",
+      "dockerImage": "",
+      "customCommand": ""
     },
     {
-      "guid": "503791c8-d96c-4c26-a80e-82eddd275777",
+      "id": "503791c8-d96c-4c26-a80e-82eddd275777",
       "filename": "terraform_plan_destroy.sh",
       "includeName": "terraform_plan_destroy.sh",
       "menuCaption": "Terraform plan destroy",
@@ -188,10 +201,12 @@
       "menuSeparatorBefore": false,
       "hideFromInstanceActionsMenu": false,
       "hideFromBottomMenu": false,
-      "menuPath": "Destroy"
+      "menuPath": "Destroy",
+      "dockerImage": "",
+      "customCommand": ""
     },
     {
-      "guid": "ab1261a4-01d5-49a5-b0a4-7d22c5a4b276",
+      "id": "ab1261a4-01d5-49a5-b0a4-7d22c5a4b276",
       "filename": "terraform_plan_destroy_confirm_apply.sh",
       "menuCaption": "Terraform plan DESTROY, confirm and apply",
       "directory": "",
@@ -209,10 +224,12 @@
       "menuSeparatorBefore": true,
       "hideFromInstanceActionsMenu": false,
       "hideFromBottomMenu": true,
-      "menuPath": "Destroy"
+      "menuPath": "Destroy",
+      "dockerImage": "",
+      "customCommand": ""
     },
     {
-      "guid": "2dbe4c13-50bf-467c-802b-ca024fa7f3a6",
+      "id": "2dbe4c13-50bf-467c-802b-ca024fa7f3a6",
       "filename": "terraform_refresh.sh",
       "menuCaption": "Terraform refresh state file",
       "directory": "",
@@ -230,7 +247,9 @@
       "menuSeparatorBefore": true,
       "hideFromInstanceActionsMenu": false,
       "hideFromBottomMenu": true,
-      "menuPath": "Utils"
+      "menuPath": "Utils",
+      "dockerImage": "",
+      "customCommand": ""
     }
   ],
   "allowedChildren": []

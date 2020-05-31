@@ -46,7 +46,6 @@ function dump_terraform_files() {
 
 function terraform_plan_confirm_apply() {
   local plan_file="/tmp/plan.out";
-
   local rego_file="$INSTANCE_DIR/terraform.rego";
   terraform_init;
   set +e; # exit code 2 indicates changes should be applied

@@ -1,5 +1,6 @@
 {
   "version": "1.0",
+  "id": "45b561c7-b1cc-4997-845d-c71f0c580bd4",
   "label": "Terraform config",
   "type": "",
   "autoExpand": false,
@@ -10,6 +11,7 @@
   "infoHtml": "",
   "attributes": [
     {
+      "id": "34404845-915d-4ce0-8455-5ad16fafa397",
       "name": "default_terraform_version",
       "caption": "Terraform version",
       "type": "java.lang.String",
@@ -24,7 +26,6 @@
       "newItemsAllowed": true,
       "parseWithVelocity": false,
       "cloneAttribute": true,
-      "autoExport": true,
       "inputPrompt": "",
       "tooltip": "\u003cp\u003eSpecify a Terraform version that should be used by default.\u003cbr/\u003e\nOther instances can then use this value on the current container through \u003ccode\u003e$container.getAttribute(\"default_terraform_version\")\u003c/code\u003e.\u003c/p\u003e",
       "scope": "Instance",

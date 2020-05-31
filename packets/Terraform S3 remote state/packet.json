@@ -1,5 +1,6 @@
 {
   "version": "1.0",
+  "id": "61654b2d-ec4c-456b-a1b4-679e57dde6f4",
   "label": "s3://%state_s3_bucket%/%state_key%",
   "type": "TERRAFORM-STATE",
   "autoExpand": false,
@@ -10,6 +11,7 @@
   "infoHtml": "",
   "attributes": [
     {
+      "id": "aa0e2705-35af-4cb8-ba5e-28d2168862ac",
       "name": "state_aws_region",
       "caption": "AWS region",
       "type": "java.lang.String",
@@ -23,7 +25,7 @@
       "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
-      "referenceChildGuidFilter": "",
+      "referenceChildIdFilter": "",
       "newItemsAllowed": true,
       "parseWithVelocity": true,
       "cloneAttribute": true,
@@ -33,6 +35,7 @@
       "defaultValue": "$instance.parent.getAttribute(\"aws_region\")"
     },
     {
+      "id": "88eb52c2-7dac-4181-8713-662bba6a9ebc",
       "name": "state_encrypt_file",
       "caption": "Encrypt",
       "type": "java.lang.Boolean",
@@ -46,7 +49,7 @@
       "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
-      "referenceChildGuidFilter": "",
+      "referenceChildIdFilter": "",
       "newItemsAllowed": false,
       "parseWithVelocity": false,
       "cloneAttribute": true,
@@ -56,6 +59,7 @@
       "defaultValue": "0"
     },
     {
+      "id": "710a46f7-b5af-4bd3-96a9-9878756ab540",
       "name": "state_key",
       "caption": "State key",
       "type": "java.lang.String",
@@ -69,7 +73,7 @@
       "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
-      "referenceChildGuidFilter": "",
+      "referenceChildIdFilter": "",
       "newItemsAllowed": false,
       "parseWithVelocity": true,
       "cloneAttribute": true,
@@ -79,6 +83,7 @@
       "defaultValue": "dev-environments/env1"
     },
     {
+      "id": "f4fa16c5-501a-41f6-9d9e-97963cfd0014",
       "name": "state_name",
       "caption": "State name",
       "type": "java.lang.String",
@@ -92,7 +97,7 @@
       "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
-      "referenceChildGuidFilter": "",
+      "referenceChildIdFilter": "",
       "newItemsAllowed": false,
       "parseWithVelocity": true,
       "cloneAttribute": true,
@@ -102,6 +107,7 @@
       "defaultValue": ""
     },
     {
+      "id": "fa679a6a-71a6-4840-9d66-da7622ad5626",
       "name": "state_profile",
       "caption": "Profile",
       "type": "java.lang.String",
@@ -115,7 +121,7 @@
       "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
-      "referenceChildGuidFilter": "",
+      "referenceChildIdFilter": "",
       "newItemsAllowed": false,
       "parseWithVelocity": false,
       "cloneAttribute": true,
@@ -125,6 +131,7 @@
       "defaultValue": ""
     },
     {
+      "id": "90b780d0-90fd-4b3c-a930-dbb1399a881d",
       "name": "state_s3_bucket",
       "caption": "Bucket",
       "type": "java.lang.String",
@@ -138,7 +145,7 @@
       "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
-      "referenceChildGuidFilter": "",
+      "referenceChildIdFilter": "",
       "newItemsAllowed": false,
       "parseWithVelocity": true,
       "cloneAttribute": true,
@@ -150,7 +157,7 @@
   ],
   "files": [
     {
-      "guid": "3ed52850-b0c0-4eb3-af91-b92357d393c2",
+      "id": "3ed52850-b0c0-4eb3-af91-b92357d393c2",
       "filename": "remote_state.tf",
       "includeName": "",
       "menuCaption": "remote_state.tf",
