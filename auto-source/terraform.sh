@@ -25,51 +25,70 @@ function terraform_init() {
 readonly -f terraform_init;
 
 function dump_terraform_files() {
-  echo
-  for f in $(find . -maxdepth 1 -type f -name \*.tpl | sort); do
-  	echo "---- $f:";
-  	cat "$f";
-  done;
-  echo
-  echo
-  for f in $(find . -maxdepth 1 -type f -name \*.tf | sort); do
-  	echo "---- $f:";
-  	cat "$f";
-  done;
-  echo
-  echo
-  for f in $(find . -maxdepth 1 -type f -name \*.tfvars | sort); do
-  	echo "---- $f:";
-  	cat "$f";
-  done;
+    echo
+    for f in $(find . -maxdepth 1 -type f -name \*.tpl | sort); do
+        echo "---- $f:";
+        cat "$f";
+    done;
+    echo
+    echo
+    for f in $(find . -maxdepth 1 -type f -name \*.tf | sort); do
+        echo "---- $f:";
+        cat "$f";
+    done;
+    echo
+    echo
+    for f in $(find . -maxdepth 1 -type f -name \*.tfvars | sort); do
+        echo "---- $f:";
+        cat "$f";
+    done;
+}
+
+function generate_vars_arguments() {
+    vars_arguments="";
+    log_info "Adding arguments for tfvars-files, if .tfvar-files exist under the packet.";
+    for f in $(find . -maxdepth 1 -type f -name \*.tfvars | sort); do
+        f="$(basename $f)";
+        log_info "Adding vars-argument for file $f";
+        vars_arguments=" $vars_arguments -var-file $f";
+    done;
 }
 
 function terraform_plan_confirm_apply() {
-  local plan_file="/tmp/plan.out";
-  local rego_file="$INSTANCE_DIR/terraform.rego";
-  terraform_init;
-  set +e; # exit code 2 indicates changes should be applied
-  $TERRAFORM plan -no-color -detailed-exitcode -out="$plan_file";
-  local plan_result="$?"
-  [[ "$plan_result" == "0" ]] && log_info "No changes to apply" && return;
-  [[ "$plan_result" == "1" ]] && log_error "Errors detected during Terraform plan." && exit 1 && return;
-  set -e;
-  execute_rego_validators --plan_file "$plan_file"
+    local plan_file="/tmp/plan.out";
+    local rego_file="$INSTANCE_DIR/terraform.rego";
+    terraform_init;
+    generate_vars_arguments;
+    set +e; # exit code 2 indicates changes should be applied
+    $TERRAFORM plan -no-color -detailed-exitcode $vars_arguments -out="$plan_file";
+    local plan_result="$?"
+    if [ "$plan_result" == "0" ]; then
+        log_info "No changes to apply";
+    elif [ "$plan_result" == "1" ]; then
+      log_error "Errors detected during Terraform plan.";
+      exit 1;
+    else
+        set -e;
+        execute_rego_validators --plan_file "$plan_file"
 
-  echo
-  echo ===============
-  read -p "Press enter to apply this plan
+        echo
+        echo ===============
+read -p "Press enter to apply this plan
 ===============";
 
 
-  terraform_apply --plan_file "$plan_file";
+        terraform_apply --plan_file "$plan_file";
+    fi;
+    run_or_source_files --directory "$TERRAFORM_TEMP_DIR" --filename_pattern 'after_terraform_apply*';
+    run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_apply*';
 
 }
 readonly -f terraform_plan_confirm_apply;
 
 function terraform_plan() {
     terraform_init;
-    $TERRAFORM plan -no-color;
+    generate_vars_arguments;
+    $TERRAFORM plan $vars_arguments -no-color;
 }
 readonly -f terraform_plan;
 
@@ -80,25 +99,26 @@ function terraform_refresh() {
 readonly -f terraform_plan;
 
 function terraform_plan_destroy_confirm_apply() {
-  local plan_file="/tmp/plan.out";
-  terraform_init;
-  set +e; # exit code 2 indicates changes should be applied
-  $TERRAFORM plan -destroy -no-color -detailed-exitcode -out="$plan_file";
-  local plan_result="$?"
-  [[ "$plan_result" == "0" ]] && log_info "No changes to apply" && return;
-  [[ "$plan_result" == "1" ]] && log_error "Errors detected during Terraform plan." && exit 1 && return;
-  set -e;
-  echo
-  echo =============================================
-  read -p "Enter the word 'DESTROY' to apply this DESTROY plan
+    local plan_file="/tmp/plan.out";
+    terraform_init;
+    set +e; # exit code 2 indicates changes should be applied
+    $TERRAFORM plan -destroy -no-color -detailed-exitcode -out="$plan_file";
+    local plan_result="$?"
+    [[ "$plan_result" == "0" ]] && log_info "No changes to apply" && return;
+    [[ "$plan_result" == "1" ]] && log_error "Errors detected during Terraform plan." && exit 1 && return;
+    set -e;
+    echo
+    echo =============================================
+    read -p "Enter the word 'DESTROY' to apply this DESTROY plan
 =============================================
 " answer;
-  if [ "$answer" != "DESTROY" ]; then
-    log_info "Answer was not 'DESTROY', try once more.";
-    read -p "Enter the word 'DESTROY' to apply this DESTROY plan " answer;
-    [[ "$answer" != "DESTROY" ]] && log_info "Answer was not 'DESTROY', aborting." && exit 1;
-  fi;
-  terraform_apply --plan_file "$plan_file";
+
+    if [ "$answer" != "DESTROY" ]; then
+        log_info "Answer was not 'DESTROY', try once more.";
+        read -p "Enter the word 'DESTROY' to apply this DESTROY plan " answer;
+        [[ "$answer" != "DESTROY" ]] && log_info "Answer was not 'DESTROY', aborting." && exit 1;
+    fi;
+    terraform_apply --plan_file "$plan_file";
 }
 readonly -f terraform_plan_destroy_confirm_apply;
 
@@ -123,13 +143,14 @@ function terraform_apply() {
             exit 1;
         fi;
     fi;
+    generate_vars_arguments;
     if [ -z "$plan_file" ]; then
-      terraform_init;
-      log_info "Executing $TERRAFORM apply";
-      $TERRAFORM apply -no-color -auto-approve;
+        terraform_init;
+        log_info "Executing $TERRAFORM apply";
+        $TERRAFORM apply -no-color $vars_arguments -auto-approve;
     else
-      log_info "Applying the plan";
-      $TERRAFORM apply -no-color "$plan_file";
+        log_info "Applying the plan";
+        $TERRAFORM apply -no-color $vars_arguments "$plan_file";
     fi;
     log_info "Apply done";
     if [ "$?" != "0" ]; then
@@ -137,8 +158,9 @@ function terraform_apply() {
         exit 1;
     fi;
     if [ -n "$output_attribute_name" ]; then
-      terraform_get_output --do_init "false" --output_attribute_name "$output_attribute_name";
+        terraform_get_output --do_init "false" --output_attribute_name "$output_attribute_name";
     fi;
+    run_or_source_files --directory "$TERRAFORM_TEMP_DIR" --filename_pattern 'after_terraform_apply*';
     run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_apply*';
 }
 readonly -f terraform_apply;
@@ -155,17 +177,23 @@ function terraform_destroy() {
     if [ -n "$output_attribute_name" ]; then
       terraform_get_output --do_init="false" --output_attribute_name "$output_attribute_name";
     fi;
+    run_or_source_files --directory "$TERRAFORM_TEMP_DIR" --filename_pattern 'after_terraform_destroy*';
     run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_destroy*';
 }
 readonly -f terraform_destroy;
 
 function terraform_get_output() {
-    local function_name="terraform_get_output" do_init="true" output_attribute_name;
+    local function_name="terraform_get_output" do_init="true" output_attribute_name save_last_output="false";
     import_args "$@";
-    check_required_arguments $function_name output_attribute_name
     [[ "$do_init" == "true" ]] && terraform_init;
     output="$($TERRAFORM output -json -no-color)";
-    save_last_output --output_json "$output" --output_attribute_name "$output_attribute_name";
+    if [ "$save_last_output" == "true" ]; then
+        check_required_arguments $function_name output_attribute_name
+        save_last_output --output_json "$output" --output_attribute_name "$output_attribute_name";
+    else
+        echo
+        echo "$output"
+    fi;
 }
 
 function save_last_output() {

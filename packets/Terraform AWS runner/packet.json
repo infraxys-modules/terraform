@@ -7,6 +7,13 @@
   "skipEveryInstanceFiles": false,
   "limitToAllowedChildren": false,
   "autoGenerate": false,
+  "extends": [
+    {
+      "name": "Terraform Helper",
+      "moduleBranchPath": "github.com\\infraxys-modules\\terraform\\master",
+      "id": "a3acdf4d-9d7c-4a0f-bbc8-8ea21f667e43"
+    }
+  ],
   "key": "",
   "infoHtml": "",
   "attributes": [

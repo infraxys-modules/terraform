@@ -2,6 +2,7 @@
 terraform {
   required_providers {
     aws = "$instance.getAttribute("aws_provider_version")"
+    template = "~> 2.1"
   }
 }
 
