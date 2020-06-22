@@ -17,12 +17,14 @@ $extra_terraform
 
 #foreach ($stateInstance in $instance.getInstancesByAttributeVelocityNames("state_velocity_names", false, true))
 #if ($stateInstance.packetKey == "TERRAFORM-S3-STATE")
+#set ($stateInstanceFound = true)
 data "terraform_remote_state" "$stateInstance.getAttribute("state_name")" {
 backend = "s3"
 config = {
 bucket = "$stateInstance.getAttribute("state_s3_bucket")"
 key = "$stateInstance.getAttribute("state_key")"
 region = "$stateInstance.getAttribute("state_aws_region")"
+profile = "$stateInstance.getAttribute("state_profile")"
 }
 }
 
@@ -31,3 +33,5 @@ region = "$stateInstance.getAttribute("state_aws_region")"
 $environment.throwException($message)
 #end
 #end
+
+

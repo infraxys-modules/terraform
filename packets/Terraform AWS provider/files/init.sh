@@ -1,7 +1,7 @@
 function get_and_set_terraform_aws_provider_credentials() {
 	local aws_profile="$instance.getAttribute("aws_profile")";
 	local provider_alias="$instance.getAttribute("provider_alias")";
-	
+
 #[[	
 	log_info "Storing the current AWS environment.";
 	local old_aws_profile="$AWS_PROFILE";

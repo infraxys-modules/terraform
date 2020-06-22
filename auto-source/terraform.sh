@@ -64,6 +64,8 @@ function terraform_plan_confirm_apply() {
     local plan_result="$?"
     if [ "$plan_result" == "0" ]; then
         log_info "No changes to apply";
+        run_or_source_files --directory "$TERRAFORM_TEMP_DIR" --filename_pattern 'after_terraform_apply*';
+        run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_apply*';
     elif [ "$plan_result" == "1" ]; then
       log_error "Errors detected during Terraform plan.";
       exit 1;
@@ -79,9 +81,6 @@ read -p "Press enter to apply this plan
 
         terraform_apply --plan_file "$plan_file";
     fi;
-    run_or_source_files --directory "$TERRAFORM_TEMP_DIR" --filename_pattern 'after_terraform_apply*';
-    run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_apply*';
-
 }
 readonly -f terraform_plan_confirm_apply;
 

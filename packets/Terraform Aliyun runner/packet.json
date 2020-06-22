@@ -1,8 +1,8 @@
 {
   "version": "1.0",
-  "id": "c11f5f24-b10c-489a-8ca2-a953b2acfc63",
+  "id": "60e03939-68df-4bfc-935a-67654ae19286",
   "label": "%instance_label%",
-  "type": "TERRAFORM-AWS-RUNNER",
+  "type": "TERRAFORM-ALIYUN-RUNNER",
   "autoExpand": true,
   "skipEveryInstanceFiles": false,
   "limitToAllowedChildren": false,
@@ -18,9 +18,9 @@
   "infoHtml": "",
   "attributes": [
     {
-      "id": "13ac5f10-a272-42fa-9da3-b5aab7b21c9a",
-      "name": "aws_provider_version",
-      "caption": "AWS provider version",
+      "id": "e81af9ea-c421-46a9-ac11-338a0e0d049e",
+      "name": "alicloud_provider_version",
+      "caption": "Alicloud provider version",
       "type": "java.lang.String",
       "formColumn": 1,
       "formOrder": 1150,
@@ -28,7 +28,7 @@
       "writability": "ALWAYS",
       "required": false,
       "isPartOfKey": false,
-      "listOfValues": "2.63.0,2.53.0",
+      "listOfValues": "1.87.0",
       "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
@@ -37,13 +37,13 @@
       "parseWithVelocity": false,
       "cloneAttribute": true,
       "inputPrompt": "",
-      "tooltip": "\u003cp\u003eLeave empty if an aws-provider is injected by a child instance. This is useful when using multiple AWS credentials in the same run.\u003c/p\u003e.",
+      "tooltip": "\u003cp\u003eLeave empty if an aliyun-provider is injected by a child instance. This is useful when using multiple Aliyun credentials in the same run.\u003c/p\u003e.",
       "scope": "Instance",
-      "defaultValue": "2.63.0"
+      "defaultValue": "1.87.0"
     },
     {
-      "id": "5d847331-e33c-4c11-888d-115564d96d22",
-      "name": "aws_region",
+      "id": "d4693e5b-5bc6-4b0b-82d3-04b8ced82cc7",
+      "name": "aliyun_region",
       "caption": "Region",
       "type": "java.lang.String",
       "formColumn": 1,
@@ -52,7 +52,7 @@
       "writability": "ALWAYS",
       "required": true,
       "isPartOfKey": false,
-      "listOfValues": "$instance.parent.getAttribute(\"aws_region\")\u003dInherit from parent,$instance.byVelocity(\"vpc\").getAttribute(\"aws_region\"),us-east-1,eu-west-1",
+      "listOfValues": "$instance.parent.getAttribute(\"aliyun_region\")\u003dInherit from parent,eu-central-1\u003dFrankfurt (eu-central-1)",
       "cacheMinutes": 0,
       "newItemsAllowed": true,
       "parseWithVelocity": true,
@@ -60,10 +60,10 @@
       "inputPrompt": "",
       "tooltip": "",
       "scope": "Instance",
-      "defaultValue": "$instance.parent.getAttribute(\"aws_region\")"
+      "defaultValue": "$instance.parent.getAttribute(\"aliyun_region\")"
     },
     {
-      "id": "7f34b229-aacb-4532-89e5-e104fead83b2",
+      "id": "c8a0cf1d-efcc-4894-930a-8bdc98ae09cc",
       "name": "extra_terraform",
       "caption": "Extra Terraform",
       "type": "byte[]",
@@ -84,7 +84,7 @@
       "defaultValue": ""
     },
     {
-      "id": "7ee45dcf-ee9b-433c-b046-5ac178df1804",
+      "id": "82988ae8-7971-4488-a22d-18d15dd569f9",
       "name": "instance_label",
       "caption": "Label",
       "type": "java.lang.String",
@@ -105,7 +105,7 @@
       "defaultValue": ""
     },
     {
-      "id": "3bf254f1-3235-4471-ac8a-d11a0a691a34",
+      "id": "30b59464-45df-45fb-accf-95c9c3d2f8d9",
       "name": "skip_terraform_action_creation",
       "caption": "skip_terraform_action_creation",
       "type": "java.lang.Boolean",
@@ -129,7 +129,7 @@
       "defaultValue": "1"
     },
     {
-      "id": "4d1e521e-5567-4295-b2ca-90be5f492016",
+      "id": "0204ebdf-635a-48f9-8bb0-81217ec4824f",
       "name": "state_velocity_names",
       "caption": "State Velocity names",
       "type": "java.lang.String",
@@ -150,7 +150,7 @@
       "defaultValue": ""
     },
     {
-      "id": "f48b2125-e20f-40dc-84df-98f3681931c8",
+      "id": "98c9d2d5-421f-41b1-a459-7aee9cd5bd8c",
       "name": "terraform_version",
       "caption": "Terraform version",
       "type": "java.lang.String",
@@ -174,15 +174,15 @@
       "defaultValue": "0.12.12"
     },
     {
-      "id": "3438fffd-4d90-4196-a8ec-6a7abc5b8cd2",
-      "name": "state_name",
-      "caption": "State name",
+      "id": "ce856561-61bd-478b-916a-bd7e1935bbf9",
+      "name": "aliyun_profile_name",
+      "caption": "Profile name",
       "type": "java.lang.String",
-      "formColumn": 2,
-      "formOrder": 100,
+      "formColumn": 1,
+      "formOrder": 1125,
       "visibility": "ALWAYS VISIBLE",
       "writability": "ALWAYS",
-      "required": false,
+      "required": true,
       "isPartOfKey": false,
       "listOfValues": "",
       "referenceFilter": "",
@@ -191,40 +191,17 @@
       "newItemsAllowed": false,
       "parseWithVelocity": true,
       "cloneAttribute": true,
-      "inputPrompt": "",
-      "tooltip": "",
+      "inputPrompt": "$container.getAttribute(\"aliyun_profile_name\")",
+      "tooltip": "\u003cp\u003eEnter the profile name in the Aliyun configuration file (variable of type ALIYUN-CONFIG).\u003cbr/\u003eEasiest way is the add a role to this container that contains an instance of \"Aliyun profile\".\u003c/p\u003e",
       "scope": "Instance",
-      "defaultValue": "$instance.getInstanceByPacketType(\"TERRAFORM-STATE\").getAttribute(\"state_name\")"
-    },
-    {
-      "id": "46ebe37d-4a9e-441b-aa91-affd64b297fb",
-      "name": "TF_LOG",
-      "caption": "TF_LOG",
-      "type": "java.lang.String",
-      "formColumn": 2,
-      "formOrder": 2300,
-      "visibility": "ALWAYS VISIBLE",
-      "writability": "ALWAYS",
-      "required": false,
-      "isPartOfKey": false,
-      "listOfValues": "TRACE,DEBUG,INFO,WARN,ERROR",
-      "referenceFilter": "",
-      "referenceValueAttributeName": "",
-      "referenceChildIdFilter": "",
-      "newItemsAllowed": true,
-      "parseWithVelocity": false,
-      "cloneAttribute": true,
-      "inputPrompt": "",
-      "tooltip": "",
-      "scope": "Instance",
-      "defaultValue": ""
+      "defaultValue": "$container.getAttribute(\"aliyun_profile_name\")"
     }
   ],
   "files": [
     {
-      "id": "73ee7dd7-7c4d-4bf5-b9c3-fa333cd14dbe",
-      "filename": "aws_builder.tf",
-      "menuCaption": "aws_builder.tf",
+      "id": "",
+      "filename": "aliyun_builder.tf",
+      "menuCaption": "aliyun_builder.tf",
       "directory": "",
       "runsIndependent": false,
       "runsParallel": false,
@@ -245,7 +222,7 @@
       "customCommand": ""
     },
     {
-      "id": "9f80bdfa-bf4b-47f9-9025-396fedead911",
+      "id": "",
       "filename": "variables.tf",
       "includeName": "",
       "menuCaption": "variables.tf",
