@@ -251,7 +251,7 @@
       "customCommand": ""
     },
     {
-      "id": "",
+      "id": "aa36efff-e282-4c80-89f7-a0e4a50e7871",
       "filename": "terraform_show_output.sh",
       "menuCaption": "Terraform show output",
       "directory": "",

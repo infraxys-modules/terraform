@@ -15,6 +15,7 @@ function get_and_set_terraform_aws_provider_credentials() {
 	export TF_VAR_${provider_alias}_aws_secret_key="$AWS_SECRET_ACCESS_KEY";
 	export TF_VAR_${provider_alias}_aws_session_token="$AWS_SESSION_TOKEN";
 
+	log_info "Following provider variables are set: TF_VAR_${provider_alias}_aws_access_key, TF_VAR_${provider_alias}_aws_secret_key and TF_VAR_${provider_alias}_aws_session_token";
 	log_info "Restoring the previous AWS environment.";
 	export AWS_PROFILE="$old_aws_profile";
 	export AWS_DEFAULT_REGION="$old_aws_default_region";
