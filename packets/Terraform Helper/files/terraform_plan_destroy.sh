@@ -4,5 +4,5 @@
 
 #[[
 cd "$TERRAFORM_TEMP_DIR";
-terraform_plan_destroy;
+terraform_plan --destroy "true";
 ]]#

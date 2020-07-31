@@ -37,3 +37,36 @@ for f in $(find . -maxdepth 1 -type f -name after_terraform_\*); do
 done;
 ]]#
 #end
+
+#set ($confirmInstances = $instance.getInstancesByPacketType("TERRAFORM-CONFIRM"))
+#set ($confirmApply = "false")
+#set ($confirmDestroy = "false" )
+#if ($confirmInstances.size() > 0)
+
+function terraform_request_apply_confirmations() {
+	#foreach ($confirmInstance in $confirmInstances)
+		#if ($confirmInstance.getAttribute("confirm_apply") == "1")
+			#set ($confirmApply = "true")
+			
+	cd "${D}ENVIRONMENTS_ROOT/$confirmInstance.getRelativePath()";
+	. ./$confirmInstance.getAttribute("confirmation_file");
+		#end
+	#end
+	
+}	
+
+function terraform_request_destroy_confirmations() {
+	#foreach ($confirmInstance in $confirmInstances)
+		#if ($confirmInstance.getAttribute("confirm_destroy") == "1")
+			#set ($confirmDestroy = "true")
+			
+	cd "${D}ENVIRONMENTS_ROOT/$confirmInstance.getRelativePath()";
+	. ./$confirmInstance.getAttribute("confirmation_file");
+		#end
+	#end
+	
+}
+#end
+
+export TERRAFORM_EXTERNAL_APPLY_CONFIRMATIONS_REQUIRED="$confirmApply";
+export TERRAFORM_EXTERNAL_DESTROY_CONFIRMATIONS_REQUIRED="$confirmDestroy";

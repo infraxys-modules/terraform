@@ -1,28 +1,160 @@
+TERRAFORM_INFRAXYS_MODULE_DIRECTORY="$(pwd)";
 DEFAULT_TERRAFORM_VERSION="0.12.12";
 process_netrc_variables; # make sure https-modules that are in GitHub Enterprise and/or private can be downloaded
+export TF_PLUGIN_CACHE_DIR="/cache/project/terraform/plugin-cache";
+TERRAFORM_PLAN_FILE="/cache/instance/terraform/last_terraform_plan";
+TERRAFORM_PLAN_OUTPUT_FILE="/cache/instance/terraform/last_terraform_plan_output";
+mkdir -p "/cache/instance/terraform";
 
 function terraform_init() {
     if [ -z "$terraform_version" ]; then
         log_info "Terraform version not specified. Using version $DEFAULT_TERRAFORM_VERSION";
         local terraform_version="$DEFAULT_TERRAFORM_VERSION";
     fi;
+    mkdir -p "$TF_PLUGIN_CACHE_DIR";
+    export TERRAFORM="terraform-$terraform_version";
 
-    export TERRAFORM="/usr/local/bin/terraform-$terraform_version";
-    if [ -f "$TERRAFORM" ]; then
-        log_info "Using Terraform version $terraform_version"
+    if [ $(which "$TERRAFORM") ]; then
+        log_info "Using Terraform binary $TERRAFORM from $(which $TERRAFORM)"
     else
-        log_info "Terraform version $terraform_version not available in this provisioning server Docker image. Installing it now.";
+        log_info "Terraform version $terraform_version not available. Installing it now in the project cache.";
         mkdir /tmp/install_terraform
         curl -sL -o /tmp/install_terraform/terraform.zip https://releases.hashicorp.com/terraform/${terraform_version}/terraform_${terraform_version}_linux_amd64.zip;
         cd /tmp/install_terraform;
         unzip terraform.zip;
-        mv terraform $TERRAFORM;
+        mv terraform "/cache/project/bin/$TERRAFORM";
+        chmod u+x "/cache/project/bin/$TERRAFORM";
         rm -Rf /tmp/install_terraform
         cd -;
     fi;
     $TERRAFORM init -no-color;
 }
 readonly -f terraform_init;
+
+function remove_last_plan() {
+    if [ -f "$TERRAFORM_PLAN_FILE" ]; then
+        rm "$TERRAFORM_PLAN_FILE";
+    fi;
+    if [ -f "$TERRAFORM_PLAN_OUTPUT_FILE" ]; then
+        rm "$TERRAFORM_PLAN_OUTPUT_FILE";
+    fi;
+
+}
+readonly -f remove_last_plan;
+
+function terraform_plan() {
+    local destroy="false";
+    import_args "$@";
+
+    remove_last_plan;
+    terraform_init;
+    set +e; # exit code 2 indicates changes should be applied
+    if [ "$destroy" == "true" ]; then
+        $TERRAFORM plan -destroy -no-color -detailed-exitcode -out="$TERRAFORM_PLAN_FILE" | tee "$TERRAFORM_PLAN_OUTPUT_FILE"
+        local plan_result="$?"
+    else
+        generate_vars_arguments;
+        $TERRAFORM plan -no-color -detailed-exitcode $vars_arguments -out="$TERRAFORM_PLAN_FILE" | tee "$TERRAFORM_PLAN_OUTPUT_FILE";
+        local plan_result="$?";
+    fi;
+
+    [[ "$plan_result" == "0" ]] && log_info "No changes to apply" && return;
+    [[ "$plan_result" == "1" ]] && log_error "Errors detected during Terraform plan." && exit 1;
+    changes_to_apply="true";
+    set -e;
+}
+readonly -f terraform_plan;
+
+function terraform_apply() {
+    local grant destroy;
+    import_args "$@";
+
+    [[ ! -f "$TERRAFORM_PLAN_FILE" ]] && log_fatal "Unable to apply because plan file '$TERRAFORM_PLAN_FILE' doesn't exist.";
+
+    if [ -n "$grant" ]; then
+        log_debug "Checking if the current user has the necessary permissions to perform this action.";
+        local has_rights="$(/tmp/infraxys/system/has_grant "$grant")";
+        if [ "$has_rights" == "true" ]; then
+            log_info "You are ALLOWED to execute terraform apply because you have grant '$grant'.";
+        else
+            log_fatal "You are NOT ALLOWED to execute terraform apply because you DO NOT HAVE grant '$grant'.";
+        fi;
+    fi;
+
+    if [ -f "${TERRAFORM_PLAN_FILE}.sha" ]; then
+        validate_terraform_sha_file;
+    fi;
+
+    terraform_init;
+    generate_vars_arguments;
+    execute_rego_validators --plan_file "$TERRAFORM_PLAN_FILE";
+    log_info "Applying plan file "$TERRAFORM_PLAN_FILE";";
+
+    $TERRAFORM apply -no-color $vars_arguments "$TERRAFORM_PLAN_FILE";
+    remove_last_plan;
+
+    log_info "Apply done";
+    if [ "$?" != "0" ]; then
+        log_error "Terraform failed. Aborting.";
+        exit 1;
+    fi;
+
+    if [ "$destroy" == "true" ]; then
+        run_or_source_files --directory "$TERRAFORM_TEMP_DIR" --filename_pattern 'after_terraform_destroy*';
+        run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_destroy*';
+    else
+        run_or_source_files --directory "$TERRAFORM_TEMP_DIR" --filename_pattern 'after_terraform_apply*';
+        run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_apply*';
+    fi;
+}
+readonly -f terraform_apply;
+
+function terraform_plan_confirm_apply() {
+    local changes_to_apply="false";
+    export TERRAFORM_ACTION="APPLY";
+    terraform_plan;
+    [[ "$changes_to_apply" == "false" ]] && return;
+
+    if [ "$TERRAFORM_EXTERNAL_APPLY_CONFIRMATIONS_REQUIRED" == "true" ]; then
+        terraform_request_apply_confirmations;
+    else
+
+        echo
+        echo ===============
+        read -p "Press enter to apply this plan
+===============";
+
+        terraform_apply;
+    fi;
+}
+readonly -f terraform_plan_confirm_apply;
+
+function terraform_plan_destroy_confirm_apply() {
+    local changes_to_apply="false";
+    export TERRAFORM_ACTION="DESTROY";
+
+    terraform_plan --destroy "true";
+    [[ "$changes_to_apply" == "false" ]] && return;
+
+    if [ "$TERRAFORM_EXTERNAL_DESTROY_CONFIRMATIONS_REQUIRED" == "true" ]; then
+        terraform_request_destroy_confirmations;
+    else
+        echo
+        echo =============================================
+        read -p "Enter the word 'DESTROY' to apply this DESTROY plan
+=============================================
+" answer;
+
+        if [ "$answer" != "DESTROY" ]; then
+            log_info "Answer was not 'DESTROY', try once more.";
+            read -p "Enter the word 'DESTROY' to apply this DESTROY plan " answer;
+            [[ "$answer" != "DESTROY" ]] && log_info "Answer was not 'DESTROY', aborting." && exit 1;
+        fi;
+        terraform_apply;
+    fi;
+}
+readonly -f terraform_plan_destroy_confirm_apply;
+
 
 function dump_terraform_files() {
     echo
@@ -54,145 +186,23 @@ function generate_vars_arguments() {
     done;
 }
 
-function terraform_plan_confirm_apply() {
-    local plan_file="/tmp/plan.out";
-    local rego_file="$INSTANCE_DIR/terraform.rego";
-    terraform_init;
-    generate_vars_arguments;
-    set +e; # exit code 2 indicates changes should be applied
-    $TERRAFORM plan -no-color -detailed-exitcode $vars_arguments -out="$plan_file";
-    local plan_result="$?"
-    if [ "$plan_result" == "0" ]; then
-        log_info "No changes to apply";
-        run_or_source_files --directory "$TERRAFORM_TEMP_DIR" --filename_pattern 'after_terraform_apply*';
-        run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_apply*';
-    elif [ "$plan_result" == "1" ]; then
-      log_error "Errors detected during Terraform plan.";
-      exit 1;
-    else
-        set -e;
-        execute_rego_validators --plan_file "$plan_file"
-
-        echo
-        echo ===============
-read -p "Press enter to apply this plan
-===============";
-
-
-        terraform_apply --plan_file "$plan_file";
-    fi;
-}
-readonly -f terraform_plan_confirm_apply;
-
-function terraform_plan() {
-    terraform_init;
-    generate_vars_arguments;
-    $TERRAFORM plan $vars_arguments -no-color;
-}
-readonly -f terraform_plan;
-
 function terraform_refresh() {
     terraform_init;
     $TERRAFORM refresh -no-color;
 }
-readonly -f terraform_plan;
+readonly -f terraform_refresh;
 
-function terraform_plan_destroy_confirm_apply() {
-    local plan_file="/tmp/plan.out";
-    terraform_init;
-    set +e; # exit code 2 indicates changes should be applied
-    $TERRAFORM plan -destroy -no-color -detailed-exitcode -out="$plan_file";
-    local plan_result="$?"
-    [[ "$plan_result" == "0" ]] && log_info "No changes to apply" && return;
-    [[ "$plan_result" == "1" ]] && log_error "Errors detected during Terraform plan." && exit 1 && return;
-    set -e;
-    echo
-    echo =============================================
-    read -p "Enter the word 'DESTROY' to apply this DESTROY plan
-=============================================
-" answer;
-
-    if [ "$answer" != "DESTROY" ]; then
-        log_info "Answer was not 'DESTROY', try once more.";
-        read -p "Enter the word 'DESTROY' to apply this DESTROY plan " answer;
-        [[ "$answer" != "DESTROY" ]] && log_info "Answer was not 'DESTROY', aborting." && exit 1;
-    fi;
-    terraform_apply --plan_file "$plan_file";
-}
-readonly -f terraform_plan_destroy_confirm_apply;
-
-function terraform_plan_destroy() {
-    terraform_init;
-    $TERRAFORM plan -destroy -no-color;
-}
-readonly -f terraform_plan_destroy;
-
-function terraform_apply() {
-    local grant output_attribute_name="" plan_file="";
-    import_args "$@";
-    if [ -n "$grant" ]; then
-        log_debug "Checking if the current user has the necessary permissions to perform this action.";
-        local has_rights="$(/tmp/infraxys/system/has_grant "$grant")";
-        if [ "$has_rights" == "true" ]; then
-            log_info "You are ALLOWED to execute terraform apply because you have grant '$grant'.";
-            log_info "You are ALLOWED to execute terraform apply because you have grant '$grant'.";
-        else
-            log_error "You are NOT ALLOWED to execute terraform apply because you DO NOT HAVE grant '$grant'.";
-            log_error "You are NOT ALLOWED to execute terraform apply because you DO NOT HAVE grant '$grant'.";
-            exit 1;
-        fi;
-    fi;
-    generate_vars_arguments;
-    if [ -z "$plan_file" ]; then
-        terraform_init;
-        log_info "Executing $TERRAFORM apply";
-        $TERRAFORM apply -no-color $vars_arguments -auto-approve;
-    else
-        log_info "Applying the plan";
-        $TERRAFORM apply -no-color $vars_arguments "$plan_file";
-    fi;
-    log_info "Apply done";
-    if [ "$?" != "0" ]; then
-        log_error "Terraform failed. Aborting.";
-        exit 1;
-    fi;
-    if [ -n "$output_attribute_name" ]; then
-        terraform_get_output --do_init "false" --output_attribute_name "$output_attribute_name";
-    fi;
-    run_or_source_files --directory "$TERRAFORM_TEMP_DIR" --filename_pattern 'after_terraform_apply*';
-    run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_apply*';
-}
-readonly -f terraform_apply;
-
-function terraform_destroy() {
-    local output_attribute_name="";
-    import_args "$@";
-    terraform_init;
-    $TERRAFORM destroy -force -no-color;
-    if [ "$?" != "0" ]; then
-        log_error "Terraform failed. Aborting.";
-        exit 1;
-    fi;
-    if [ -n "$output_attribute_name" ]; then
-      terraform_get_output --do_init="false" --output_attribute_name "$output_attribute_name";
-    fi;
-    run_or_source_files --directory "$TERRAFORM_TEMP_DIR" --filename_pattern 'after_terraform_destroy*';
-    run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_destroy*';
-}
-readonly -f terraform_destroy;
 
 function terraform_get_output() {
-    local function_name="terraform_get_output" do_init="true" output_attribute_name save_last_output="false";
+    local function_name="terraform_get_output" do_init="true" output_attribute_name;
     import_args "$@";
     [[ "$do_init" == "true" ]] && terraform_init;
     output="$($TERRAFORM output -json -no-color)";
-    if [ "$save_last_output" == "true" ]; then
-        check_required_arguments $function_name output_attribute_name
-        save_last_output --output_json "$output" --output_attribute_name "$output_attribute_name";
-    else
-        echo
-        echo "$output"
-    fi;
+    echo "============ BEGIN OUTPUT ===============";
+    echo
+    echo "$output"
+    echo
+    echo "============  END OUTPUT  ===============";
 }
 
 function save_last_output() {
@@ -202,3 +212,23 @@ function save_last_output() {
     #output_json="$(echo "$output_json" | jq -c '.')";
     update_instance_attribute --instance_id "$instance_db_id" --attribute_name "$output_attribute_name" --attribute_value "$output_json" --compile_instance="true";
 }
+
+function validate_terraform_sha_file() {
+    log_info "A SHA-file exists for the plan. Validating it using arguments-file";
+    local json_file="/tmp/infraxys/system/custom/arguments.json";
+    if [ ! -f "$json_file" ]; then
+        log_fatal "SHA-file for the plan exists, but $json_file is not there to validate the SHA.";
+    fi;
+    cat "$json_file";
+
+    local sha="$(cat "$json_file" | jq -r '.sha' )";
+    if [ "sha" == "null" ]; then
+       log_fatal "Argument JSON doesn't contain attribute 'sha'!";
+    fi;
+    local file_sha="$(cat "${TERRAFORM_PLAN_FILE}.sha")";
+    log_info "Comparing SHA $sha to $file_sha.";
+    if [ "$sha" != "$file_sha" ]; then
+        log_fatal "Plan file has changed or an invalid SHA was passed.";
+    fi;
+}
+readonly -f validate_terraform_sha_file;

@@ -16,7 +16,7 @@ $extra_terraform
 #end
 
 #foreach ($stateInstance in $instance.getInstancesByAttributeVelocityNames("state_velocity_names", false, true))
-#if ($stateInstance.packetKey == "TERRAFORM-S3-STATE")
+#if ($stateInstance.packetType == "TERRAFORM-STATE")
 #set ($stateInstanceFound = true)
 data "terraform_remote_state" "$stateInstance.getAttribute("state_name")" {
 backend = "s3"
@@ -29,7 +29,7 @@ profile = "$stateInstance.getAttribute("state_profile")"
 }
 
 #else
-#set ($message = "Terraform state instance key '" + $stateInstance.packetKey + "' not supported")
+#set ($message = "Terraform state instance key '" + $stateInstance.packetType + "' not supported")
 $environment.throwException($message)
 #end
 #end

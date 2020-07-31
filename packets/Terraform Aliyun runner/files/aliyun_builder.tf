@@ -18,7 +18,7 @@ $extra_terraform
 #end
 
 #foreach ($stateInstance in $instance.getInstancesByAttributeVelocityNames("state_velocity_names", false, true))
-#if ($stateInstance.packetKey == "TERRAFORM-ALIYUN-OSS-STATE")
+#if ($stateInstance.packetType == "TERRAFORM-STATE")
 data "terraform_remote_state" "$stateInstance.getAttribute("state_name")" {
     backend   = "oss"
     config    = {
@@ -33,7 +33,7 @@ data "terraform_remote_state" "$stateInstance.getAttribute("state_name")" {
 }
 
 #else
-#set ($message = "Terraform state instance key '" + $stateInstance.packetKey + "' not supported")
+#set ($message = "Terraform state instance type '" + $stateInstance.packetType + "' not supported")
 $environment.throwException($message)
 #end
 #end

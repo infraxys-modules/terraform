@@ -9,32 +9,7 @@
   "autoGenerate": false,
   "key": "",
   "infoHtml": "\u003cp\u003eThis packet contains shared (Velocity) functions for terraform directory setup, ...\u003c/p\u003e",
-  "attributes": [
-    {
-      "id": "48dc1c32-c7f0-4d0b-a775-f3bc0002e362",
-      "name": "instance_label",
-      "caption": "Instance label",
-      "type": "java.lang.String",
-      "formColumn": 1,
-      "formOrder": 1100,
-      "visibility": "ALWAYS VISIBLE",
-      "writability": "ALWAYS",
-      "required": true,
-      "isPartOfKey": true,
-      "listOfValues": "",
-      "cacheMinutes": 0,
-      "referenceFilter": "",
-      "referenceValueAttributeName": "",
-      "referenceChildIdFilter": "",
-      "newItemsAllowed": false,
-      "parseWithVelocity": false,
-      "cloneAttribute": true,
-      "inputPrompt": "",
-      "tooltip": "",
-      "scope": "Instance",
-      "defaultValue": "Terraform Helper"
-    }
-  ],
+  "attributes": [],
   "files": [
     {
       "id": "d443a86f-8e37-41bb-8d84-abec0a2b61c6",
