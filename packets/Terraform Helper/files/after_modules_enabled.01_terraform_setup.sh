@@ -70,3 +70,9 @@ function terraform_request_destroy_confirmations() {
 
 export TERRAFORM_EXTERNAL_APPLY_CONFIRMATIONS_REQUIRED="$confirmApply";
 export TERRAFORM_EXTERNAL_DESTROY_CONFIRMATIONS_REQUIRED="$confirmDestroy";
+
+cd "${D}INSTANCE_DIR";
+if [ -f "init.sh" ]; then
+    log_info "Sourcing init.sh in ${D}INSTANCE_DIR";
+    . ./init.sh;
+fi;

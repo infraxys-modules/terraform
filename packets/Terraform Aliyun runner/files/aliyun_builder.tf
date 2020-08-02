@@ -17,6 +17,11 @@ provider "alicloud" {
 $extra_terraform
 #end
 
+#set ($childStateInstances = $instance.getInstancesByPacketType("TERRAFORM-STATE"))
+#if ($childStateInstances.size() == 0)
+	$environment.throwException("No instance of packet type 'TERRAFORM-STATE' found under this Terraform runner instance.")
+#end
+
 #foreach ($stateInstance in $instance.getInstancesByAttributeVelocityNames("state_velocity_names", false, true))
 #if ($stateInstance.packetType == "TERRAFORM-STATE")
 data "terraform_remote_state" "$stateInstance.getAttribute("state_name")" {
@@ -33,7 +38,7 @@ data "terraform_remote_state" "$stateInstance.getAttribute("state_name")" {
 }
 
 #else
-#set ($message = "Terraform state instance type '" + $stateInstance.packetType + "' not supported")
-$environment.throwException($message)
+	#set ($message = "Terraform state instance type '" + $stateInstance.packetType + "' not supported")
+	$environment.throwException($message)
 #end
 #end

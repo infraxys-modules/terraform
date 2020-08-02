@@ -15,6 +15,11 @@ provider "aws" {
 $extra_terraform
 #end
 
+#set ($childStateInstances = $instance.getInstancesByPacketType("TERRAFORM-STATE"))
+#if ($childStateInstances.size() == 0)
+	$environment.throwException("No instance of packet type 'TERRAFORM-STATE' found under this Terraform runner instance.")
+#end
+
 #foreach ($stateInstance in $instance.getInstancesByAttributeVelocityNames("state_velocity_names", false, true))
 #if ($stateInstance.packetType == "TERRAFORM-STATE")
 #set ($stateInstanceFound = true)
@@ -29,8 +34,8 @@ profile = "$stateInstance.getAttribute("state_profile")"
 }
 
 #else
-#set ($message = "Terraform state instance key '" + $stateInstance.packetType + "' not supported")
-$environment.throwException($message)
+	#set ($message = "Terraform state instance key '" + $stateInstance.packetType + "' not supported")
+	$environment.throwException($message)
 #end
 #end
 
