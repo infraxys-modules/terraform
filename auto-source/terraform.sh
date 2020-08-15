@@ -66,7 +66,7 @@ function terraform_plan() {
 readonly -f terraform_plan;
 
 function terraform_apply() {
-    local grant destroy;
+    local grant destroy no_plan="false";
     import_args "$@";
 
     [[ ! -f "$TERRAFORM_PLAN_FILE" ]] && log_fatal "Unable to apply because plan file '$TERRAFORM_PLAN_FILE' doesn't exist.";
