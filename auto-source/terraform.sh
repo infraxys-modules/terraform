@@ -6,27 +6,36 @@ TERRAFORM_PLAN_FILE="/cache/instance/terraform/last_terraform_plan";
 TERRAFORM_PLAN_OUTPUT_FILE="/cache/instance/terraform/last_terraform_plan_output";
 mkdir -p "/cache/instance/terraform";
 
-function terraform_init() {
-    if [ -z "$terraform_version" ]; then
-        log_info "Terraform version not specified. Using version $DEFAULT_TERRAFORM_VERSION";
-        local terraform_version="$DEFAULT_TERRAFORM_VERSION";
-    fi;
-    mkdir -p "$TF_PLUGIN_CACHE_DIR";
-    export TERRAFORM="terraform-$terraform_version";
+function ensure_terraform() {
+    local terraform_version;
+    import_args "$@";
+    check_required_arguments "ensure_terraform" terraform_version;
 
+    local TERRAFORM="terraform-$terraform_version";
     if [ $(which "$TERRAFORM") ]; then
-        log_info "Using Terraform binary $TERRAFORM from $(which $TERRAFORM)"
+        log_info "Terraform version $terraform_version is already installed at $(which $TERRAFORM).";
     else
         log_info "Terraform version $terraform_version not available. Installing it now in the project cache.";
         mkdir /tmp/install_terraform
-        curl -sL -o /tmp/install_terraform/terraform.zip https://releases.hashicorp.com/terraform/${terraform_version}/terraform_${terraform_version}_linux_amd64.zip;
+        curl -Lo /tmp/install_terraform/terraform.zip https://releases.hashicorp.com/terraform/${terraform_version}/terraform_${terraform_version}_linux_amd64.zip;
         cd /tmp/install_terraform;
         unzip terraform.zip;
         mv terraform "/cache/project/bin/$TERRAFORM";
         chmod u+x "/cache/project/bin/$TERRAFORM";
         rm -Rf /tmp/install_terraform
         cd -;
+        log_info "Terraform $terraform_version is available at $(which $TERRAFORM)";
     fi;
+}
+
+function terraform_init() {
+    if [ -z "$terraform_version" ]; then
+        log_info "Terraform version not specified. Using version $DEFAULT_TERRAFORM_VERSION";
+        local terraform_version="$DEFAULT_TERRAFORM_VERSION";
+    fi;
+    mkdir -p "$TF_PLUGIN_CACHE_DIR";
+    ensure_terraform --version "$terraform_version";
+    export TERRAFORM="terraform-$terraform_version";
     $TERRAFORM init -no-color;
 }
 readonly -f terraform_init;
@@ -35,6 +44,10 @@ function remove_last_plan() {
     if [ -f "$TERRAFORM_PLAN_FILE" ]; then
         rm "$TERRAFORM_PLAN_FILE";
     fi;
+    if [ -f "${TERRAFORM_PLAN_FILE}.sha" ]; then
+        rm "${TERRAFORM_PLAN_FILE}.sha";
+    fi;
+
     if [ -f "$TERRAFORM_PLAN_OUTPUT_FILE" ]; then
         rm "$TERRAFORM_PLAN_OUTPUT_FILE";
     fi;

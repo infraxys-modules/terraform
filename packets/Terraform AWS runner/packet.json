@@ -9,9 +9,14 @@
   "autoGenerate": false,
   "extends": [
     {
-      "name": "Terraform Helper",
+      "name": "Terraform S3 remote state",
       "moduleBranchPath": "github.com\\infraxys-modules\\terraform\\master",
-      "id": "a3acdf4d-9d7c-4a0f-bbc8-8ea21f667e43"
+      "id": "61654b2d-ec4c-456b-a1b4-679e57dde6f4"
+    },
+    {
+      "name": "AWS Terraform base",
+      "moduleBranchPath": "github.com\\infraxys-aws\\aws-commons\\master",
+      "id": "79b72fc7-47bf-4f23-a726-368e06b86115"
     }
   ],
   "key": "",
