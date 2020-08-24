@@ -34,7 +34,7 @@ function terraform_init() {
         local terraform_version="$DEFAULT_TERRAFORM_VERSION";
     fi;
     mkdir -p "$TF_PLUGIN_CACHE_DIR";
-    ensure_terraform --version "$terraform_version";
+    ensure_terraform --terraform_version "$terraform_version";
     export TERRAFORM="terraform-$terraform_version";
     $TERRAFORM init -no-color;
 }
