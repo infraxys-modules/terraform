@@ -245,3 +245,16 @@ function validate_terraform_sha_file() {
     fi;
 }
 readonly -f validate_terraform_sha_file;
+
+function terraform_import() {
+    terraform_init;
+
+    read -p "Enter resource type: " resource_type
+    read -p "Enter resource name: " resource_name
+    read -p "Enter resource to import object id: " resource_id
+
+    [[ -z "$resource_type" || -z "$resource_name" || -z "$resource_id" ]] && log_fatal "Terraform resource type and name and the object id are mandatory.";
+    echo $TERRAFORM import "$resource_type" "$resource_name";
+    $TERRAFORM import "${resource_type}.$resource_name" "$resource_id";
+}
+readonly -f terraform_import

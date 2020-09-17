@@ -23,14 +23,19 @@ $extra_terraform
 #foreach ($stateInstance in $instance.getInstancesByAttributeVelocityNames("state_velocity_names", false, true))
 #if ($stateInstance.hasPacketType("TERRAFORM-STATE"))
 #set ($stateInstanceFound = true)
-data "terraform_remote_state" "$stateInstance.getAttribute("state_name")" {
-backend = "s3"
-config = {
-bucket = "$stateInstance.getAttribute("state_s3_bucket")"
-key = "$stateInstance.getAttribute("state_key")"
-region = "$stateInstance.getAttribute("state_aws_region")"
-profile = "$stateInstance.getAttribute("state_profile")"
-}
+#set ($tmpStateName = $stateInstance.getAttribute("state_name"))
+#if ($tmpStateName == "")
+	#set ($message = "Terraform state instance '" + $stateInstance + "' has no state name.")
+	$environment.throwException($message)
+#end
+data "terraform_remote_state" "$tmpStateName" {
+    backend = "s3"
+    config = {
+        bucket = "$stateInstance.getAttribute("state_s3_bucket")"
+        key = "$stateInstance.getAttribute("state_key")"
+        region = "$stateInstance.getAttribute("state_aws_region")"
+        profile = "$stateInstance.getAttribute("state_profile")"
+    }
 }
 
 #else
