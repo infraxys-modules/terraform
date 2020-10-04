@@ -82,7 +82,9 @@ function terraform_apply() {
     local grant destroy no_plan="false";
     import_args "$@";
 
-    [[ ! -f "$TERRAFORM_PLAN_FILE" ]] && log_fatal "Unable to apply because plan file '$TERRAFORM_PLAN_FILE' doesn't exist.";
+    if [ "$no_plan" != "true" ]; then
+        [[ ! -f "$TERRAFORM_PLAN_FILE" ]] && log_fatal "Unable to apply because plan file '$TERRAFORM_PLAN_FILE' doesn't exist.";
+    fi;
 
     if [ -n "$grant" ]; then
         log_debug "Checking if the current user has the necessary permissions to perform this action.";
@@ -94,20 +96,27 @@ function terraform_apply() {
         fi;
     fi;
 
-    if [ -f "${TERRAFORM_PLAN_FILE}.sha" ]; then
-        validate_terraform_sha_file;
+    if [ "$no_plan" != "true" ]; then
+        if [ -f "${TERRAFORM_PLAN_FILE}.sha" ]; then
+            validate_terraform_sha_file;
+        fi;
     fi;
 
     terraform_init;
     generate_vars_arguments;
     execute_rego_validators --plan_file "$TERRAFORM_PLAN_FILE";
-    log_info "Applying plan file "$TERRAFORM_PLAN_FILE";";
-
-    $TERRAFORM apply -no-color $vars_arguments "$TERRAFORM_PLAN_FILE";
-    remove_last_plan;
+    if [ "$no_plan" != "true" ]; then
+        log_info "Applying plan file "$TERRAFORM_PLAN_FILE";";
+        $TERRAFORM apply -no-color $vars_arguments "$TERRAFORM_PLAN_FILE";
+        local apply_result=$?;
+        remove_last_plan;
+    else
+        $TERRAFORM apply -no-color -auto-approve $vars_arguments;
+        local apply_result=$?;
+    fi;
 
     log_info "Apply done";
-    if [ "$?" != "0" ]; then
+    if [ "$apply_result" != "0" ]; then
         log_error "Terraform failed. Aborting.";
         exit 1;
     fi;
