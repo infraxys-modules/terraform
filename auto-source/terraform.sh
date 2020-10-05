@@ -123,10 +123,10 @@ function terraform_apply() {
 
     if [ "$destroy" == "true" ]; then
         run_or_source_files --directory "$TERRAFORM_TEMP_DIR" --filename_pattern 'after_terraform_destroy*';
-        run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_destroy*';
+        #run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_destroy*';
     else
         run_or_source_files --directory "$TERRAFORM_TEMP_DIR" --filename_pattern 'after_terraform_apply*';
-        run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_apply*';
+        #run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_apply*';
     fi;
 }
 readonly -f terraform_apply;
@@ -267,3 +267,4 @@ function terraform_import() {
     $TERRAFORM import "${resource_type}.$resource_name" "$resource_id";
 }
 readonly -f terraform_import
+
