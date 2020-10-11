@@ -172,7 +172,7 @@ function terraform_plan_destroy_confirm_apply() {
             read -p "Enter the word 'DESTROY' to apply this DESTROY plan " answer;
             [[ "$answer" != "DESTROY" ]] && log_info "Answer was not 'DESTROY', aborting." && exit 1;
         fi;
-        terraform_apply;
+        terraform_apply destroy="true";
     fi;
 }
 readonly -f terraform_plan_destroy_confirm_apply;
