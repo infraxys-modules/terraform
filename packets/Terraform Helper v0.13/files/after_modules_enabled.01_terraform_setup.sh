@@ -47,24 +47,24 @@ function terraform_request_apply_confirmations() {
 	#foreach ($confirmInstance in $confirmInstances)
 		#if ($confirmInstance.getAttribute("confirm_apply") == "1")
 			#set ($confirmApply = "true")
-			
+
 	cd "${D}ENVIRONMENTS_ROOT/$confirmInstance.getRelativePath()";
 	. ./$confirmInstance.getAttribute("confirmation_file");
 		#end
 	#end
-	
-}	
+
+}
 
 function terraform_request_destroy_confirmations() {
 	#foreach ($confirmInstance in $confirmInstances)
 		#if ($confirmInstance.getAttribute("confirm_destroy") == "1")
 			#set ($confirmDestroy = "true")
-			
+
 	cd "${D}ENVIRONMENTS_ROOT/$confirmInstance.getRelativePath()";
 	. ./$confirmInstance.getAttribute("confirmation_file");
 		#end
 	#end
-	
+
 }
 #end
 
@@ -72,7 +72,8 @@ export TERRAFORM_EXTERNAL_APPLY_CONFIRMATIONS_REQUIRED="$confirmApply";
 export TERRAFORM_EXTERNAL_DESTROY_CONFIRMATIONS_REQUIRED="$confirmDestroy";
 
 cd "${D}INSTANCE_DIR";
-if [ -f "init.sh" ]; then
-    log_info "Sourcing init.sh in ${D}INSTANCE_DIR";
-    . ./init.sh;
+
+log_info "Sourcing terraform_init.sh in ${D}INSTANCE_DIR if it exists.";
+if [ -f "terraform_init.sh" ]; then
+    . ./terraform_init.sh;
 fi;

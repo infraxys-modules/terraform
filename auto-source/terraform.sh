@@ -1,5 +1,5 @@
 TERRAFORM_INFRAXYS_MODULE_DIRECTORY="$(pwd)";
-DEFAULT_TERRAFORM_VERSION="0.12.12";
+DEFAULT_TERRAFORM_VERSION="0.13.4";
 process_netrc_variables; # make sure https-modules that are in GitHub Enterprise and/or private can be downloaded
 export TF_PLUGIN_CACHE_DIR="/cache/project/terraform/plugin-cache";
 TERRAFORM_PLAN_FILE="/cache/instance/terraform/last_terraform_plan";
@@ -123,10 +123,8 @@ function terraform_apply() {
 
     if [ "$destroy" == "true" ]; then
         run_or_source_files --directory "$TERRAFORM_TEMP_DIR" --filename_pattern 'after_terraform_destroy*';
-        #run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_destroy*';
     else
         run_or_source_files --directory "$TERRAFORM_TEMP_DIR" --filename_pattern 'after_terraform_apply*';
-        #run_or_source_files --directory "$INSTANCE_DIR" --filename_pattern 'after_terraform_apply*';
     fi;
 }
 readonly -f terraform_apply;
