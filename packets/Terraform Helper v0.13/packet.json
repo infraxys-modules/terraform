@@ -51,7 +51,7 @@
       "writability": "ALWAYS",
       "required": true,
       "isPartOfKey": false,
-      "listOfValues": "0.12.12,0.12.24",
+      "listOfValues": "0.13.4",
       "cacheMinutes": 0,
       "referenceFilter": "",
       "referenceValueAttributeName": "",
@@ -61,7 +61,7 @@
       "inputPrompt": "",
       "tooltip": "",
       "scope": "Instance",
-      "defaultValue": "0.12.12"
+      "defaultValue": "0.13.4"
     },
     {
       "id": "d72dca68-b6b1-4149-9efe-d9cffaf83b92",

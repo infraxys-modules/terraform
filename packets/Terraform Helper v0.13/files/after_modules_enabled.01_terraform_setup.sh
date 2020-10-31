@@ -1,13 +1,18 @@
 TERRAFORM_TEMP_DIR="/tmp/terraform";
+if [ -d "${D}TERRAFORM_TEMP_DIR" ]; then
+	log_info "Removing existing directory ${D}TERRAFORM_TEMP_DIR";
+	rm -Rf "${D}TERRAFORM_TEMP_DIR";
+fi;
+
 export TF_VAR_TERRAFORM_TEMP_DIR="${D}TERRAFORM_TEMP_DIR"
 mkdir -p "${D}TERRAFORM_TEMP_DIR";
 cp -R . "${D}TERRAFORM_TEMP_DIR";
 #foreach ($terraformInstance in $instance.getInstancesByFileExtensions(".tf", ".tpl", ".tfvars"))
 dir="$terraformInstance.getRelativePath()";
 cd ../../../${D}dir;
-if [ -f "init.sh" ]; then
-    log_info "Sourcing init.sh in ${D}dir";
-    . ./init.sh;
+if [ -f "terraform_init.sh" ]; then
+    log_info "Sourcing terraform_init.sh in ${D}dir";
+    . ./terraform_init.sh;
 fi;
 log_info 'Copying *.tf, *.tpl, *.tfvars and after_terraform_apply* files from instance "$terraformInstance.toString()"';
 tmp_instance_guid="$terraformInstance.getGuid()";
