@@ -1,15 +1,20 @@
-#if ($instance.getAttribute("aws_provider_version") != "")
 terraform {
   required_providers {
+#if ($instance.getAttribute("aws_provider_version") != "")
     aws = "$instance.getAttribute("aws_provider_version")"
+#end
     template = "$instance.getAttribute("template_version", "~> 2.2.0")"
+#foreach ($extraRequiredProvider in $instance.getAttribute("extra_required_providers").split("\n"))
+#if ($extraRequiredProvider.trim() != "")
+    $extraRequiredProvider
+#end
+#end
   }
 }
 
 provider "aws" {
   region = "$instance.getAttribute("aws_region")"
 }
-#end
 
 #if ($extra_terraform)
 $extra_terraform

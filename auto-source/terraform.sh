@@ -11,7 +11,7 @@ function ensure_terraform() {
     import_args "$@";
     check_required_arguments "ensure_terraform" terraform_version;
 
-    local TERRAFORM="terraform-$terraform_version";
+    export TERRAFORM="terraform-$terraform_version";
     if [ $(which "$TERRAFORM") ]; then
         log_info "Terraform version $terraform_version is already installed at $(which $TERRAFORM).";
     else

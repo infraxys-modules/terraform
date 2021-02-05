@@ -7,6 +7,7 @@
   "autoExpand": false,
   "skipEveryInstanceFiles": false,
   "limitToAllowedChildren": false,
+  "autoGenerate": false,
   "extends": [
     {
       "name": "Terraform Helper v0.13",
@@ -97,6 +98,28 @@
       "parseWithVelocity": false,
       "inputPrompt": "",
       "tooltip": "\u003cp\u003eSpecify a comma-separated list of Velocity names of instances that configure a state store for other Terraform runs.\u003c/p\u003e",
+      "scope": "Instance",
+      "defaultValue": ""
+    },
+    {
+      "id": "651cbe8a-a4e5-4f9d-b21b-7f53a1448cd1",
+      "name": "extra_required_providers",
+      "caption": "Extra required providers",
+      "type": "byte[]",
+      "formColumn": 2,
+      "formOrder": 2100,
+      "visibility": "ALWAYS VISIBLE",
+      "writability": "ALWAYS",
+      "required": false,
+      "isPartOfKey": false,
+      "listOfValues": "",
+      "referenceFilter": "",
+      "referenceValueAttributeName": "",
+      "referenceChildIdFilter": "",
+      "newItemsAllowed": false,
+      "parseWithVelocity": false,
+      "inputPrompt": "",
+      "tooltip": "\u003cp\u003eSpecify the extra providers to add to required_providers. One provider configuration per line.\u003c/p\u003eExample:\u003cbr/\u003e\nvault \u003d \"2.16.0\"\n",
       "scope": "Instance",
       "defaultValue": ""
     }
